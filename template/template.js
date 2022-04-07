@@ -14,6 +14,44 @@ const createPane = () => {
     folder.addInput(params, "radius", { min: 1, max: 32 });
 };
 
+class Vector {
+    constructor(x_, y_) {
+        this.x = x_;
+        this.y = y_;
+    }
+    mag() {
+        return Math.sqrt(this.x * this.x + this.y * this.y);
+    }
+    norm() {
+        this.x = this.x / this.mag();
+        this.y = this.y / this.mag();
+    }
+    add(v) {
+        this.x += v.x;
+        this.y += v.y;
+    }
+    sub(v) {
+        this.x -= v.x;
+        this.y -= v.y;
+    }
+    mult(value) {
+        this.x *= value;
+        this.y *= value;
+    }
+    dot(v) {
+        return this.x * v.x + this.y * v.y;
+    }
+    div(value) {
+        this.x /= value;
+        this.y /= value;
+    }
+    dist(v) {
+        return Math.sqrt(
+            (this.x - v.x) * (this.x - v.x) + (this.y - v.y) * (this.y - v.y)
+        );
+    }
+}
+
 let pause;
 
 function checkLoop() {
