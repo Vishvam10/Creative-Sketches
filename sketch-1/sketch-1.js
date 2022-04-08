@@ -1,111 +1,42 @@
-class Vector {
-    constructor(x_, y_) {
-        this.x = x_;
-        this.y = y_;
-    }
-    mag() {
-        return Math.sqrt(this.x * this.x + this.y * this.y);
-    }
-    norm() {
-        if (this.mag != 0) {
-            this.x = this.x / this.mag();
-            this.y = this.y / this.mag();
-        }
-    }
-    limit(value) {
-        if (this.mag() > value) {
-            return new Vector(value, value);
-        }
-        return;
-    }
-    add(v) {
-        this.x += v.x;
-        this.y += v.y;
-        return new Vector(this.x, this.y);
-    }
-    sub(v) {
-        this.x -= v.x;
-        this.y -= v.y;
-        return new Vector(this.x, this.y);
-    }
-    mult(value) {
-        this.x *= value;
-        this.y *= value;
-    }
-    dot(v) {
-        return this.x * v.x + this.y * v.y;
-    }
-    div(value) {
-        this.x /= value;
-        this.y /= value;
-    }
-    dist(v) {
-        return Math.sqrt(
-            (this.x - v.x) * (this.x - v.x) + (this.y - v.y) * (this.y - v.y)
-        );
-    }
-}
-
-class Entity {
-    // constructor(position_, velocity_) {
-    //     this.position = position_;
-    //     this.velocity = velocity_;
-    //     this.acceleration = 0;
-    //     this.topSpeed = 10;
-    // }
-    constructor() {
-        this.position = new Vector(random(width), random(height));
-        this.velocity = new Vector(0, 0);
-        this.topSpeed = 4;
-    }
-    update() {
-        const mousePosition = new Vector(mouseX, mouseY);
-        const dir = mousePosition.sub(this.position);
-        dir.norm();
-        dir.mult(0.5);
-        this.acceleration = dir;
-        this.velocity.add(this.acceleration);
-        console.log("VEL : ", this.velocity);
-        this.velocity.limit(this.topSpeed);
-        console.log(
-            "NEW VEL : ",
-            this.velocity == this.velocity.limit(this.topSpeed)
-        );
-        this.position.add(this.velocity);
-    }
-    display() {
-        stroke(0);
-        fill(100);
-        ellipse(this.position.x, this.position.y, 16, 16);
-    }
-    checkEdges() {
-        if (this.position.x > width) {
-            this.position.x = 0;
-        } else if (this.position.x < 0) {
-            this.position.x = width;
-        }
-        if (this.position.y > height) {
-            this.position.y = 0;
-        } else if (this.position.y < 0) {
-            this.position.y = height;
-        }
-    }
-}
-
-let position;
-let velocity;
+const PARAMS = {
+    angle1: 0,
+    angle2: 0,
+    angleV1: 0.01,
+    angleV2: 0.1,
+    ampx: 200,
+    ampy: 100,
+    oTrail: 100,
+};
 
 function setup() {
-    createCanvas(400, 400);
-    frameRate(60);
-    noLoop();
+    const width = windowWidth - 400;
+    const height = windowHeight - 50;
+    const controlContainer = document.getElementById("controls");
+    createCanvas(width, height);
+    const pane = new Tweakpane.Pane({
+        container: controlContainer,
+    });
+    pane.addInput(PARAMS, "angle1", { min: 0, max: 1, step: 0.01 });
+    pane.addInput(PARAMS, "angle2", { min: 0, max: 1, step: 0.01 });
+    pane.addInput(PARAMS, "angleV1", { min: 0, max: 1, step: 0.01 });
+    pane.addInput(PARAMS, "angleV2", { min: 0, max: 1, step: 0.01 });
+    pane.addInput(PARAMS, "ampx", { min: 0, max: width / 2, step: 1 });
+    pane.addInput(PARAMS, "ampy", { min: 0, max: height / 2, step: 1 });
+    pane.addInput(PARAMS, "oTrail", { min: 0, max: 200, step: 1 });
+
+    background(0);
 }
 
 function draw() {
-    console.log("DRAWING ...");
-    background(204);
-    const en = new Entity();
-    en.update();
-    en.checkEdges();
-    en.display();
+    background(0, PARAMS.oTrail);
+    translate(width / 2, height / 2);
+    fill("rgb(0,255,255)");
+    stroke("rgb(0,255,255)");
+    let x = map(sin(PARAMS.angle1), -1, 1, -PARAMS.ampx, PARAMS.ampx);
+    let y = map(sin(PARAMS.angle2), -1, 1, -PARAMS.ampy, PARAMS.ampy);
+    strokeWeight(2);
+    line(0, 0, x, y);
+    circle(x, y, 16);
+    PARAMS.angle1 += PARAMS.angleV1;
+    PARAMS.angle2 += PARAMS.angleV2;
 }
