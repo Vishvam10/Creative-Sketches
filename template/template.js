@@ -1,75 +1,36 @@
-const params = {
-    leftProb: 0.5,
-    upProb: 0.5,
-    radius: 4,
+const PARAMS = {
+    angle1: 0,
+    angle2: 0,
+    angleV1: 0.01,
+    angleV2: 0.1,
+    ampx: 200,
+    ampy: 100,
 };
-
-const createPane = () => {
-    const pane = new Tweakpane.Pane();
-    let folder;
-
-    folder = pane.addFolder({ title: "Grid" });
-    folder.addInput(params, "leftProb", { min: 0, max: 1, step: 0.01 });
-    folder.addInput(params, "upProb", { min: 0, max: 1, step: 0.01 });
-    folder.addInput(params, "radius", { min: 1, max: 32 });
-};
-
-class Vector {
-    constructor(x_, y_) {
-        this.x = x_;
-        this.y = y_;
-    }
-    mag() {
-        return Math.sqrt(this.x * this.x + this.y * this.y);
-    }
-    norm() {
-        this.x = this.x / this.mag();
-        this.y = this.y / this.mag();
-    }
-    add(v) {
-        this.x += v.x;
-        this.y += v.y;
-    }
-    sub(v) {
-        this.x -= v.x;
-        this.y -= v.y;
-    }
-    mult(value) {
-        this.x *= value;
-        this.y *= value;
-    }
-    dot(v) {
-        return this.x * v.x + this.y * v.y;
-    }
-    div(value) {
-        this.x /= value;
-        this.y /= value;
-    }
-    dist(v) {
-        return Math.sqrt(
-            (this.x - v.x) * (this.x - v.x) + (this.y - v.y) * (this.y - v.y)
-        );
-    }
-}
-
-let pause;
-
-function checkLoop() {
-    if (!this.checked()) {
-        loop();
-    } else {
-        noLoop();
-    }
-}
 
 function setup() {
-    createPane();
-    createCanvas(400, 400);
-    pause = createCheckbox("Pause", false);
-    pause.changed(checkLoop);
-    background(220);
+    const width = windowWidth - 400;
+    const height = windowHeight - 50;
+    const controlContainer = document.getElementById("controls");
+    createCanvas(width, height);
+    const pane = new Tweakpane.Pane({
+        container: controlContainer,
+    });
+    const folder1 = pane.addFolder({
+        title: "1",
+    });
+    const folder2 = pane.addFolder({
+        title: "2",
+    });
+    folder1.addInput(PARAMS, "angle1", { min: 0, max: 1, step: 0.01 });
+    folder1.addInput(PARAMS, "angle2", { min: 0, max: 1, step: 0.01 });
+    folder1.addInput(PARAMS, "angleV1", { min: 0, max: 1, step: 0.01 });
+    folder2.addInput(PARAMS, "angleV2", { min: 0, max: 1, step: 0.01 });
+    folder2.addInput(PARAMS, "ampx", { min: 0, max: width / 2, step: 1 });
+
+    background(0);
 }
 
 function draw() {
-    console.log("Drawing . . .");
+    background(0, PARAMS.oTrail);
+    translate(width / 2, height / 2);
 }
