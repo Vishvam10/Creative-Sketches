@@ -30,7 +30,9 @@
     }
     
     a {
-        color: teal;
+        text-decoration: none;
+        list-style: none;
+        color: black;
     }
     
     #controls {
@@ -56,8 +58,16 @@
     }
     
     .details_sketch_no {
-        margin: 0rem 0rem 5rem 0rem;
+        margin: 2rem 0rem 5rem 0rem;
         font-weight: 400;
+    }
+    
+    .github_link {
+        transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+    
+    .github_link:hover {
+        font-weight: 700;
     }
 </style>
 
@@ -66,15 +76,16 @@
         <div class="details">
             <h3 class="details_sketch_no">Nature of Code | <span style="font-weight: 700;">No 1</span></h3>
             <h1 class="details_title">Simple Wave On Both Axes</h1>
-            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illum consequatur dolores labore eaque beatae accusantium assumenda nesciunt dolorum? </p>
+            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolorum? </p>
             <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. </p>
         </div>
         <div id="controls">
             <h3>Controls</h3>
         </div>
         <footer>
-            <h3 style="font-weight: 400">
-                Made with ❤. Developed by <a href="https://github.com/Vishvam10" style="text-decoration: none; list-style: none;"><b>Vishvam</b></a>
+            <h3 style="font-weight: 400; margin : 0rem 0rem 1rem 0rem;">
+                Made with ❤. Developed by
+                <a href="https://github.com/Vishvam10" class="github_link">Vishvam</a>
             </h3>
         </footer>
     </div>
