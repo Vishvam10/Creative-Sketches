@@ -9,6 +9,7 @@ const PARAMS = {
     line_wt: 0.1,
     color: "rgb(0,255,255)",
     oTrail: -100,
+    pause: false,
 };
 
 function setup() {
@@ -35,11 +36,15 @@ function setup() {
     folder1.addInput(PARAMS, "ampy", { min: 0, max: height / 2, step: 1 });
     folder2.addInput(PARAMS, "color");
     folder2.addInput(PARAMS, "oTrail", { min: -100, max: 200, step: 1 });
+    folder2.addInput(PARAMS, "pause");
 
     background(0);
 }
 
 function draw() {
+    if (PARAMS.pause) {
+        return;
+    }
     background(0, PARAMS.oTrail);
     translate(width / 2, height / 2);
     fill(PARAMS.color);
