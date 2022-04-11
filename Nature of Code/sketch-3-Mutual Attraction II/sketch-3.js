@@ -5,7 +5,6 @@ const PARAMS = {
     show_attractor: true,
     a_grav_str: 0.01,
     line: true,
-    v_angle: 180,
     oTrail: 100,
     pause: false,
 };
@@ -92,15 +91,6 @@ function mouseDragged(ev) {
         };
         att.updateProperties(data);
     }
-}
-
-function setup() {
-    createPane();
-    createEntities();
-    const width = windowWidth - 400;
-    const height = windowHeight - 50;
-    createCanvas(width, height);
-    background(0);
 }
 
 function draw() {

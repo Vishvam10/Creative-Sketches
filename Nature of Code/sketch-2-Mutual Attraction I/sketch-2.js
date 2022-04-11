@@ -6,7 +6,6 @@ const PARAMS = {
     a_grav_str: 0.01,
     line: true,
     att_mass: 500,
-    v_angle: 180,
     oTrail: 100,
     pause: false,
 };
