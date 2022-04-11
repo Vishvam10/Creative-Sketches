@@ -1,10 +1,13 @@
 const PARAMS = {
-    show_entity: true,
-    oTrail: 100,
+    show_bob: true,
+    bob_color: "#009dff",
+    show_arm: true,
+    arm_color: "#ffffff",
+    damping: 1,
+    gravity: 0.4,
+    oTrail: 250,
     pause: false,
 };
-
-// let entities = [];
 
 const createPane = () => {
     const controlContainer = document.getElementById("controls");
@@ -15,22 +18,22 @@ const createPane = () => {
         title: "Pendulum",
     });
     const folder2 = pane.addFolder({
+        title: "Environment",
+    });
+    const folder3 = pane.addFolder({
         title: "General",
     });
 
-    folder1.addInput(PARAMS, "show_entity");
-    // folder1
-    //     .addInput(PARAMS, "particles", { min: 2, max: 10, step: 1 })
-    //     .on("change", (ev) => {
-    //         particles = parseInt(ev.value);
-    //         createEntities();
-    //     });
-    // folder1.addInput(PARAMS, "e_grav_str");
+    folder1.addInput(PARAMS, "show_bob");
+    folder1.addInput(PARAMS, "bob_color");
+    folder1.addInput(PARAMS, "show_arm");
+    folder1.addInput(PARAMS, "arm_color");
 
-    // folder2.addInput(PARAMS, "show_attractor");
+    folder2.addInput(PARAMS, "gravity", { min: -1, max: 1, step: 0.001 });
+    folder2.addInput(PARAMS, "damping", { min: 0, max: 1, step: 0.001 });
 
-    folder2.addInput(PARAMS, "oTrail", { min: -100, max: 200, step: 1 });
-    folder2.addInput(PARAMS, "pause");
+    folder3.addInput(PARAMS, "oTrail", { min: -200, max: 400, step: 1 });
+    folder3.addInput(PARAMS, "pause");
 };
 
 function setup() {
@@ -39,33 +42,28 @@ function setup() {
     const height = windowHeight - 50;
     createCanvas(width, height);
     background(0);
-    translate(width / 2, height / 2);
-    pendulum = new Pendulum(width / 2, 0, 400, 400);
+    pendulum = new Pendulum(0, 0, 200, 400, PI / 4);
 }
-
-// function doubleClicked() {
-//     if (mouseX < width && mouseY < height) {
-//         createAttractor(500, mouseX - width / 2, mouseY - height / 2);
-//         att.show();
-//     }
-// }
-
-// function mouseDragged(ev) {
-//     for (att of attractors) {
-//         let data = {
-//             x: ev.clientX - width / 2,
-//             y: ev.clientY - height / 2,
-//             shiftKey: ev.shiftKey,
-//         };
-//         att.updateProperties(data);
-//     }
-// }
 
 function draw() {
     if (PARAMS.pause) {
         return;
     }
     background(0, PARAMS.oTrail);
-    pendulum.update();
-    pendulum.show();
+    translate(width / 2, height / 3);
+    noStroke();
+    fill(255);
+    circle(0, 0, 32);
+    let d = {
+        gravity: PARAMS.gravity,
+        damping: PARAMS.damping,
+    };
+    pendulum.update(d);
+    let data = {
+        show_bob: PARAMS.show_bob,
+        bob_color: PARAMS.bob_color,
+        show_arm: PARAMS.show_arm,
+        arm_color: PARAMS.arm_color,
+    };
+    pendulum.show(data);
 }

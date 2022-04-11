@@ -1,57 +1,41 @@
 class Pendulum {
-    constructor(ox, oy, al, m) {
+    constructor(ox, oy, al, m, ang) {
         this.origin = createVector(ox, oy);
         this.pos = createVector();
-        this.angle = PI / 4;
+        this.angle = ang;
         this.aVel = 0.0;
         this.aAcc = 0.0;
-        this.damping = 1;
         this.mass = m;
         this.r = sqrt(this.mass);
         this.arm_length = al;
     }
 
-    update() {
-        let gravity = 0.5;
-        this.aAcc = (-1 * gravity * sin(this.angle)) / this.arm_length;
+    update(data) {
+        this.aAcc = (-1 * data.gravity * sin(this.angle)) / this.arm_length;
         this.aVel += this.aAcc;
-        this.aVel *= this.damping;
+        this.aVel *= data.damping;
         this.angle += this.aVel;
     }
 
-    show() {
-            this.pos.set(
-                this.arm_length * sin(this.angle),
-                this.arm_length * cos(this.angle),
-                0
-            );
-            this.pos.add(this.origin);
-
-            stroke(255);
-            strokeWeight(2);
+    show(data) {
+        this.pos.set(
+            this.arm_length * sin(this.angle),
+            this.arm_length * cos(this.angle),
+            0
+        );
+        this.pos.add(this.origin);
+        if (data.show_arm) {
+            let ac = data.arm_color ? data.arm_color : "#ffffff";
+            stroke(ac);
+            strokeWeight(1);
             line(this.origin.x, this.origin.y, this.pos.x, this.pos.y);
-
+        }
+        if (data.show_bob) {
+            let bc = data.bob_color ? data.bob_color : "#df8d00";
             ellipseMode(CENTER);
-            fill(127);
+            noStroke();
+            fill(bc);
             ellipse(this.pos.x, this.pos.y, this.r, this.r);
         }
-        // updateProperties(data) {
-        //     let d = dist(
-        //         mouseX - width / 2,
-        //         mouseY - height / 2,
-        //         this.pos.x,
-        //         this.pos.y
-        //     );
-        //     console.log("DISTANCE : ", d < this.r);
-        //     if (d < this.r) {
-        //         if (data.shiftKey) {
-        //             let new_G = data.y / 500;
-        //             console.log("G : ", new_G);
-        //             this.G = constrain(new_G, -0.02, 0.02);
-        //         } else {
-        //             this.mass = abs(data.y * 50);
-        //             this.r = sqrt(this.mass);
-        //         }
-        //     }
-        // }
+    }
 }
