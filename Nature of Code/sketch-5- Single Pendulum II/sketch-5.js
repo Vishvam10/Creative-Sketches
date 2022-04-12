@@ -4,9 +4,11 @@ const PARAMS = {
   show_arm: false,
   arm_color: "#004876",
   rand_mass: true,
+  mass: 400,
   mass_range: 400,
-  rand_arm_length: true,
-  arm_length_range: 100,
+  rand_arm_len: true,
+  arm_length: 50,
+  al_range: 100,
   damping: 1,
   gravity: 0.4,
   oTrail: 25,
@@ -21,16 +23,21 @@ const createPane = () => {
   const pane = new Tweakpane.Pane({
     container: controlContainer,
   });
-  const folder1 = pane.addFolder({
+
+  const tab = pane.addTab({
+    pages: [{ title: "Parameters" }, { title: "Defaults" }],
+  });
+
+  const folder1 = tab.pages[0].addFolder({
     title: "Pendulum",
   });
-  const folder2 = pane.addFolder({
+  const folder2 = tab.pages[0].addFolder({
     title: "System",
   });
-  const folder3 = pane.addFolder({
+  const folder3 = tab.pages[0].addFolder({
     title: "Environment",
   });
-  const folder4 = pane.addFolder({
+  const folder4 = tab.pages[0].addFolder({
     title: "General",
   });
 
@@ -49,26 +56,37 @@ const createPane = () => {
     max: 800,
     step: 1,
   });
-  folder2.addInput(PARAMS, "rand_arm_length").on("change", (ev) => {
+  folder2.addInput(PARAMS, "rand_arm_len").on("change", (ev) => {
     if (ev.value) {
-      arm_length_range.disabled = false;
+      al_range.disabled = false;
     } else {
-      arm_length_range.disabled = true;
+      al_range.disabled = true;
     }
   });
-  const arm_length_range = folder2.addInput(PARAMS, "arm_length_range", {
+  const al_range = folder2.addInput(PARAMS, "al_range", {
     min: 50,
     max: 800,
     step: 1,
   });
-  folder2.addInput(PARAMS, "bob_color");
-  folder2.addInput(PARAMS, "arm_color");
 
   folder3.addInput(PARAMS, "gravity", { min: -1, max: 1, step: 0.001 });
   folder3.addInput(PARAMS, "damping", { min: 0, max: 1, step: 0.001 });
 
   folder4.addInput(PARAMS, "oTrail", { min: -200, max: 400, step: 1 });
   folder4.addInput(PARAMS, "pause");
+
+  tab.pages[1].addInput(PARAMS, "bob_color");
+  tab.pages[1].addInput(PARAMS, "arm_color");
+  tab.pages[1].addInput(PARAMS, "mass", {
+    min: 50,
+    max: 800,
+    step: 1,
+  });
+  tab.pages[1].addInput(PARAMS, "arm_length", {
+    min: 50,
+    max: 800,
+    step: 1,
+  });
 };
 
 function doubleClicked() {
@@ -78,6 +96,9 @@ function doubleClicked() {
 }
 
 function mouseDragged() {
+  background(0, 100);
+  fill(255, 255, 255, 50);
+  circle(mouseX - width / 2, mouseY, 32);
   if (mouseX < width && mouseY < height) {
     let m, al;
     if (PARAMS.rand_mass) {
@@ -86,7 +107,7 @@ function mouseDragged() {
       m = 400;
     }
     if (PARAMS.rand_mass) {
-      al = random(50, PARAMS.arm_length_range);
+      al = random(50, PARAMS.al_range);
       console.log("AL : ", al);
     } else {
       al = 50;
