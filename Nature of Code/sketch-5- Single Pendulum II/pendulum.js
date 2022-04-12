@@ -6,7 +6,7 @@ class Pendulum {
     this.aVel = 0.0;
     this.aAcc = 0.0;
     this.mass = m;
-    this.r = sqrt(this.mass) / 10;
+    this.r = sqrt(this.mass) / 5;
     this.arm_length = al;
   }
 
