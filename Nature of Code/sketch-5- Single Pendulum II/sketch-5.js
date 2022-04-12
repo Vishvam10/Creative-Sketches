@@ -3,12 +3,12 @@ const PARAMS = {
   bob_color: "#009dff",
   show_arm: false,
   arm_color: "#004876",
-  rand_mass: true,
+  rand_mass: false,
   mass: 400,
   mass_range: 400,
-  rand_arm_len: true,
+  rand_arm_len: false,
   arm_length: 50,
-  al_range: 100,
+  arm_len_range: 100,
   damping: 1,
   gravity: 0.4,
   oTrail: 25,
@@ -25,7 +25,7 @@ const createPane = () => {
   });
 
   const tab = pane.addTab({
-    pages: [{ title: "Parameters" }, { title: "Defaults" }],
+    pages: [{ title: "Parameters" }, { title: "Others" }],
   });
 
   const folder1 = tab.pages[0].addFolder({
@@ -39,6 +39,12 @@ const createPane = () => {
   });
   const folder4 = tab.pages[0].addFolder({
     title: "General",
+  });
+  const folder5 = tab.pages[1].addFolder({
+    title: "Defaults",
+  });
+  const folder6 = tab.pages[1].addFolder({
+    title: "Preferences",
   });
 
   folder1.addInput(PARAMS, "show_bob");
@@ -58,12 +64,12 @@ const createPane = () => {
   });
   folder2.addInput(PARAMS, "rand_arm_len").on("change", (ev) => {
     if (ev.value) {
-      al_range.disabled = false;
+      arm_len_range.disabled = false;
     } else {
-      al_range.disabled = true;
+      arm_len_range.disabled = true;
     }
   });
-  const al_range = folder2.addInput(PARAMS, "al_range", {
+  const arm_len_range = folder2.addInput(PARAMS, "arm_len_range", {
     min: 50,
     max: 800,
     step: 1,
@@ -75,23 +81,38 @@ const createPane = () => {
   folder4.addInput(PARAMS, "oTrail", { min: -200, max: 400, step: 1 });
   folder4.addInput(PARAMS, "pause");
 
-  tab.pages[1].addInput(PARAMS, "bob_color");
-  tab.pages[1].addInput(PARAMS, "arm_color");
-  tab.pages[1].addInput(PARAMS, "mass", {
+  folder5.addInput(PARAMS, "mass", {
     min: 50,
     max: 800,
     step: 1,
   });
-  tab.pages[1].addInput(PARAMS, "arm_length", {
+  folder5.addInput(PARAMS, "arm_length", {
     min: 50,
     max: 800,
     step: 1,
   });
+  folder6.addInput(PARAMS, "bob_color");
+  folder6.addInput(PARAMS, "arm_color");
 };
 
 function doubleClicked() {
+  background(0, 100);
+  fill(255, 255, 255, 50);
+  circle(mouseX - width / 2, mouseY, 32);
   if (mouseX < width && mouseY < height) {
-    createPendulum(mouseX - width / 2, mouseY, 50, 400, PI / 4);
+    let m, al;
+    if (PARAMS.rand_mass) {
+      m = random(50, PARAMS.mass_range);
+    } else {
+      m = PARAMS.mass;
+    }
+    if (PARAMS.rand_mass) {
+      al = random(50, PARAMS.arm_len_range);
+      console.log("AL : ", al);
+    } else {
+      al = PARAMS.arm_length;
+    }
+    createPendulum(mouseX - width / 2, mouseY, al, m, PI / 4);
   }
 }
 
@@ -104,13 +125,13 @@ function mouseDragged() {
     if (PARAMS.rand_mass) {
       m = random(50, PARAMS.mass_range);
     } else {
-      m = 400;
+      m = PARAMS.mass;
     }
     if (PARAMS.rand_mass) {
-      al = random(50, PARAMS.al_range);
+      al = random(50, PARAMS.arm_len_range);
       console.log("AL : ", al);
     } else {
-      al = 50;
+      al = PARAMS.arm_length;
     }
     createPendulum(mouseX - width / 2, mouseY, al, m, PI / 4);
   }
