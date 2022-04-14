@@ -8,7 +8,7 @@ const PARAMS = {
 
     rand_radius: false,
     radius: 4,
-    radius_range: 100,
+    radius_range: 16,
 
     gravity: {
         x: 0,
@@ -99,7 +99,7 @@ const createPane = () => {
 
 function doubleClicked() {
     if (mouseX < width && mouseY < height) {
-        ps.push(new ParticleSystem(mouseX, mouseY, PARAMS.gravity));
+        ps.push(new ParticleSystem(mouseX, mouseY, PARAMS.gravity, PARAMS.color));
     }
 }
 
@@ -109,12 +109,11 @@ function setup() {
     const height = windowHeight - 50;
     createCanvas(width, height);
     background(0);
-    ps.push(new ParticleSystem(width / 2, 100, PARAMS.gravity));
+    ps.push(new ParticleSystem(width / 2, 100, PARAMS.gravity, PARAMS.color));
     // noLoop();
 }
 
 function draw() {
-    console.log("2 : ", PARAMS.lifespan);
     if (PARAMS.pause) {
         return;
     }
@@ -126,10 +125,15 @@ function draw() {
         } else {
             m = PARAMS.mass;
         }
+        if (PARAMS.rand_radius) {
+            r = random(1, PARAMS.radius_range);
+        } else {
+            r = PARAMS.radius;
+        }
         p.addParticles(
             1,
             PARAMS.lifespan,
-            PARAMS.radius,
+            r,
             m,
             PARAMS.color,
             PARAMS.decay_rate,
