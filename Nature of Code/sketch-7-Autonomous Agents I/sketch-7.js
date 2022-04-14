@@ -32,14 +32,13 @@ const createPane = () => {
     const folder3 = pane.addFolder({
         title: "General",
     });
-
+    //- TODO
     folder1
         .addInput(PARAMS, "max_speed", {
             min: 1,
             max: 50,
         })
         .on("change", (ev) => {
-            console.log(ev.value);
             createVehicle(
                 200,
                 200,
@@ -132,7 +131,6 @@ function draw() {
         return;
     }
     background(0, PARAMS.oTrail);
-    console.log(vehicles.length);
     if (targets[0]) {
         targets[0].update();
         targets[0].show();
