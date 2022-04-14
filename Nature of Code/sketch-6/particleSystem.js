@@ -1,21 +1,22 @@
 class ParticleSystem {
-    constructor(x, y, g) {
+    constructor(x, y, g, c) {
         this.pos = createVector(x, y);
         this.particles = [];
-        this.g = g;
+        this.gravity = createVector(g.x, g.y);
+        this.color = c;
     }
-    addParticles(n, lifespan, radius, mass, color, decay_rate) {
+    addParticles(n, lifespan, radius, mass, color, decay_rate, gravity) {
         console.log("1 : ", lifespan);
         for (let i = 0; i < n; i++) {
             this.particles.push(
                 new Particle(
                     this.pos.x,
                     this.pos.y,
-                    this.g,
+                    this.gravity,
                     lifespan,
                     radius,
                     mass,
-                    color,
+                    this.color,
                     decay_rate
                 )
             );

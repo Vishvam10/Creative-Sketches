@@ -1,6 +1,6 @@
 const PARAMS = {
     lifespan: 255,
-    decay_rate: 5,
+    decay_rate: 1,
 
     rand_mass: false,
     mass: 400,
@@ -10,9 +10,12 @@ const PARAMS = {
     radius: 4,
     radius_range: 100,
 
-    gravity: 0.4,
+    gravity: {
+        x: 0,
+        y: 0.4,
+    },
 
-    oTrail: 200,
+    oTrail: 24,
     pause: false,
     color: "#ff0023",
 };
@@ -49,7 +52,10 @@ const createPane = () => {
 
     folder1.addInput(PARAMS, "lifespan", { min: 50, max: 1000, step: 1 });
     folder1.addInput(PARAMS, "decay_rate", { min: 0.01, max: 10, step: 0.001 });
-
+    folder2.addInput(PARAMS, "gravity", {
+        x: { min: -1, max: 1 },
+        y: { min: -1, max: 1 },
+    });
     folder2.addInput(PARAMS, "rand_mass").on("change", (ev) => {
         if (ev.value) {
             mass_range.disabled = false;
@@ -75,8 +81,6 @@ const createPane = () => {
         step: 0.1,
     });
 
-    folder2.addInput(PARAMS, "gravity", { min: -1, max: 1, step: 0.001 });
-
     folder3.addInput(PARAMS, "oTrail", { min: -200, max: 400, step: 1 });
     folder3.addInput(PARAMS, "pause");
 
@@ -95,7 +99,7 @@ const createPane = () => {
 
 function doubleClicked() {
     if (mouseX < width && mouseY < height) {
-        ps.push(new ParticleSystem(mouseX, mouseY, PARAMS.g));
+        ps.push(new ParticleSystem(mouseX, mouseY, PARAMS.gravity));
     }
 }
 
@@ -128,7 +132,8 @@ function draw() {
             PARAMS.radius,
             m,
             PARAMS.color,
-            PARAMS.decay_rate
+            PARAMS.decay_rate,
+            PARAMS.gravity
         );
         p.update();
         p.show();

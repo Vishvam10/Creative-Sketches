@@ -7,7 +7,7 @@ class Particle {
         this.mass = mass;
         this.lifespan = lifespan;
         this.decay_rate = decay_rate;
-        this.gravity = createVector(0, g);
+        this.gravity = g;
         this.color = color;
     }
 
