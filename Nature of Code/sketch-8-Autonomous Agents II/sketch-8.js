@@ -11,9 +11,9 @@ const PARAMS = {
         x: 0.2,
         y: 0.4,
     },
-
-    pause: false,
     t_color: "#ff0023",
+    pursue_line: false,
+    pause: false,
 };
 
 const createPane = () => {
@@ -89,17 +89,55 @@ const createPane = () => {
         );
     });
 
-    folder2.addInput(PARAMS, "t_vel", {
-        x: { min: -10, max: 10 },
-        y: { min: -10, max: 10 },
+    folder2
+        .addInput(PARAMS, "t_vel", {
+            x: { min: -10, max: 10 },
+            y: { min: -10, max: 10 },
+        })
+        .on("change", (ev) => {
+            createTarget(
+                target.pos.x,
+                target.pos.y,
+                true,
+                PARAMS.t_color,
+                ev.value.x,
+                ev.value.y,
+                PARAMS.t_acc.x,
+                PARAMS.t_acc.y
+            );
+        });
+    folder2
+        .addInput(PARAMS, "t_acc", {
+            x: { min: -10, max: 10 },
+            y: { min: -10, max: 10 },
+        })
+        .on("change", (ev) => {
+            createTarget(
+                target.pos.x,
+                target.pos.y,
+                true,
+                PARAMS.t_color,
+                PARAMS.t_vel.x,
+                PARAMS.t_vel.y,
+                ev.value.x,
+                ev.value.y
+            );
+        });
+    folder2.addInput(PARAMS, "t_color").on("change", (ev) => {
+        createTarget(
+            target.pos.x,
+            target.pos.y,
+            true,
+            ev.value,
+            PARAMS.t_vel.x,
+            PARAMS.t_vel.y,
+            PARAMS.t_acc.x,
+            PARAMS.t_acc.y
+        );
     });
-    folder2.addInput(PARAMS, "t_acc", {
-        x: { min: -10, max: 10 },
-        y: { min: -10, max: 10 },
-    });
-    folder2.addInput(PARAMS, "t_color");
 
     folder3.addInput(PARAMS, "pause");
+    folder3.addInput(PARAMS, "pursue_line");
 };
 
 var vehicle;
@@ -154,16 +192,15 @@ function draw() {
     if (PARAMS.pause) {
         return;
     }
-    background(0, PARAMS.oTrail);
+    background(0);
     if (target) {
         target.wrap();
         target.update();
         target.show();
 
-        // let s = vehicle.seek(target.pos);
-        // vehicle.applyForce(s);
-        let steering_force = vehicle.pursue(target);
+        let steering_force = vehicle.pursue(target, PARAMS.pursue_line);
         vehicle.applyForce(steering_force);
+
         vehicle.wrap();
         vehicle.update();
         vehicle.show();

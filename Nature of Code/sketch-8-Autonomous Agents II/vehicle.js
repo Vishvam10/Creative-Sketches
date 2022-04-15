@@ -9,13 +9,23 @@ class Vehicle {
         this.color = color;
     }
 
-    pursue(vehicle) {
+    pursue(vehicle, trail) {
         let target = vehicle.pos.copy();
         let prediction = vehicle.vel.copy().mult(10);
         target.add(prediction);
+        if (trail) {
+            push();
+            stroke(255);
+            strokeWeight(0.5);
+            noFill();
+            line(this.pos.x, this.pos.y, target.x, target.y);
+            pop();
+        }
+        push();
         noStroke();
         fill(0, 255, 0);
         circle(target.x, target.y, 16);
+        pop();
         return this.seek(target);
     }
 
