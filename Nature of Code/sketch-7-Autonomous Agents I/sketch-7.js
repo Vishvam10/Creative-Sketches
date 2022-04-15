@@ -32,7 +32,6 @@ const createPane = () => {
     const folder3 = pane.addFolder({
         title: "General",
     });
-    //- TODO
     folder1
         .addInput(PARAMS, "max_speed", {
             min: 1,
@@ -44,19 +43,51 @@ const createPane = () => {
                 200,
                 parseInt(ev.value),
                 PARAMS.max_force,
-                PARAMS.size,
+                PARAMS.v_size,
                 PARAMS.color
             );
         });
-    folder1.addInput(PARAMS, "max_force", {
-        min: 0.1,
-        max: 5,
+    folder1
+        .addInput(PARAMS, "max_force", {
+            min: 0.1,
+            max: 5,
+        })
+        .on("change", (ev) => {
+            createVehicle(
+                200,
+                200,
+                PARAMS.max_speed,
+                parseInt(ev.value),
+                PARAMS.v_size,
+                PARAMS.color
+            );
+        });
+    folder1
+        .addInput(PARAMS, "v_size", {
+            min: 2,
+            max: 10,
+            step: 1,
+        })
+        .on("change", (ev) => {
+            createVehicle(
+                200,
+                200,
+                PARAMS.max_speed,
+                PARAMS.max_force,
+                parseInt(ev.value),
+                PARAMS.color
+            );
+        });
+    folder1.addInput(PARAMS, "v_color").on("change", (ev) => {
+        createVehicle(
+            200,
+            200,
+            PARAMS.max_speed,
+            PARAMS.max_force,
+            PARAMS.v_size,
+            ev.value
+        );
     });
-    folder1.addInput(PARAMS, "v_size", {
-        min: 2,
-        max: 10,
-    });
-    folder1.addInput(PARAMS, "v_color");
 
     folder2.addInput(PARAMS, "t_vel", {
         x: { min: -10, max: 10 },
@@ -104,8 +135,8 @@ function createTarget(x, y, motion, color, vx = 0, vy = 0, ax = 0, ay = 0) {
 }
 
 function createVehicle(x, y, max_speed, max_force, size, color) {
-    vehicle = new Vehicle(x, y, max_speed, max_force, size, color);
     vehicles = [];
+    vehicle = new Vehicle(x, y, max_speed, max_force, size, color);
     vehicles.push(vehicle);
 }
 
@@ -134,6 +165,7 @@ function draw() {
     if (targets[0]) {
         targets[0].update();
         targets[0].show();
+        console.log(vehicles[0]);
         vehicles[0].seek(target.pos);
         vehicles[0].update();
         vehicles[0].show();
