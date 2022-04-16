@@ -4,13 +4,17 @@ const PARAMS = {
   v_color: "#ffffff",
   v_size: 4,
 
-  mag: 200,
-  sur_radius: 200,
+  paths: 0,
+  mag: 100,
+  sur_radius: 100,
   jitter: 0.2,
   trail: true,
   trail_col: "#00baff",
 
-  diagram: false,
+  optimize: false,
+  clear_rate: 1000,
+
+  diagram: true,
   pause: false,
 };
 
@@ -20,20 +24,24 @@ const createPane = () => {
     container: controlContainer,
   });
 
-  const folder1 = pane.addFolder({
+  const tab = pane.addTab({
+    pages: [{ title: "Parameters" }, { title: "Optimization" }],
+  });
+
+  const folder1 = tab.pages[0].addFolder({
     title: "Vehicle",
   });
-  const folder2 = pane.addFolder({
+  const folder2 = tab.pages[0].addFolder({
     title: "Wander Behaviour",
   });
-  const folder3 = pane.addFolder({
+  const folder3 = tab.pages[0].addFolder({
     title: "General",
   });
 
   folder1
     .addInput(PARAMS, "max_speed", {
       min: 1,
-      max: 25,
+      max: 5,
     })
     .on("change", (ev) => {
       // data["max_speed"] = ev.value;
@@ -45,9 +53,7 @@ const createPane = () => {
         parseInt(ev.value),
         PARAMS.max_force,
         PARAMS.v_size,
-        PARAMS.color,
-        PARAMS.mag,
-        PARAMS.sur_radius
+        PARAMS.color
       );
     });
   folder1
@@ -62,9 +68,7 @@ const createPane = () => {
         PARAMS.max_speed,
         parseInt(ev.value),
         PARAMS.v_size,
-        PARAMS.color,
-        PARAMS.mag,
-        PARAMS.sur_radius
+        PARAMS.color
       );
     });
   folder1
@@ -80,9 +84,7 @@ const createPane = () => {
         PARAMS.max_speed,
         PARAMS.max_force,
         parseInt(ev.value),
-        PARAMS.color,
-        PARAMS.mag,
-        PARAMS.sur_radius
+        PARAMS.color
       );
     });
   folder1.addInput(PARAMS, "v_color").on("change", (ev) => {
@@ -92,9 +94,7 @@ const createPane = () => {
       PARAMS.max_speed,
       PARAMS.max_force,
       PARAMS.v_size,
-      ev.value,
-      PARAMS.mag,
-      PARAMS.sur_radius
+      ev.value
     );
   });
 
@@ -120,6 +120,25 @@ const createPane = () => {
 
   folder3.addInput(PARAMS, "pause");
   folder3.addInput(PARAMS, "diagram");
+
+  tab.pages[1].addInput(PARAMS, "optimize").on("change", (ev) => {
+    if (ev.value) {
+      clear_rate.disabled = false;
+    } else {
+      clear_rate.disabled = true;
+    }
+  });
+  const clear_rate = tab.pages[1].addInput(PARAMS, "clear_rate", {
+    disabled: true,
+    min: 100,
+    max: 5000,
+    step: 1,
+  });
+  tab.pages[1].addMonitor(PARAMS, "paths", {
+    view: "graph",
+    min: 0,
+    max: 50,
+  });
 };
 
 var vehicle;
@@ -128,13 +147,16 @@ function setLineDash(list) {
   drawingContext.setLineDash(list);
 }
 
-function mouseClicked() {
-  if (mouseX < width && mouseY < height) {
-  }
-}
-
 function doubleClicked() {
   if (mouseX < width && mouseY < height) {
+    createVehicle(
+      mouseX,
+      mouseY,
+      PARAMS.max_speed,
+      PARAMS.max_force,
+      PARAMS.v_size,
+      PARAMS.v_color
+    );
   }
 }
 
@@ -166,6 +188,12 @@ function draw() {
   background(0);
   vehicle.wrap();
   vehicle.wander(PARAMS.mag, PARAMS.sur_radius, PARAMS.diagram);
-  vehicle.update(PARAMS.jitter, PARAMS.trail);
+  PARAMS.paths = vehicle.paths.length;
+  vehicle.update(
+    PARAMS.jitter,
+    PARAMS.trail,
+    PARAMS.optimize,
+    PARAMS.clear_rate
+  );
   vehicle.show(PARAMS.trail, PARAMS.trail_col);
 }

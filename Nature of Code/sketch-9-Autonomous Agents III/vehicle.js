@@ -64,13 +64,14 @@ class Vehicle {
     this.acc.add(force);
   }
 
-  update(jitter = 0.1, trail = false, optimize = true, lim = 1000) {
+  update(jitter = 0.1, trail = false, optimize = false, lim = 1000) {
     this.vel.add(this.acc);
     this.vel.limit(this.maxSpeed);
     this.pos.add(this.vel);
     this.acc.set(0, 0);
 
     this.theta += random(-jitter, jitter);
+    this.theta = constrain(this.theta, 0, PI);
     if (trail) {
       this.cur_path.push(this.pos.copy());
       if (optimize && frameCount % lim == 0) {
