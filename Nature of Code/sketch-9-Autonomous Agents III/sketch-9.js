@@ -6,6 +6,7 @@ const PARAMS = {
 
   mag: 200,
   sur_radius: 200,
+  jitter: 0.2,
   trail: true,
   trail_col: "#00baff",
 
@@ -97,42 +98,23 @@ const createPane = () => {
     );
   });
 
-  folder2
-    .addInput(PARAMS, "mag", {
-      min: 50,
-      max: 500,
-      step: 1,
-    })
-    .on("change", (ev) => {
-      createVehicle(
-        vehicle.pos.x,
-        vehicle.pos.y,
-        PARAMS.max_speed,
-        PARAMS.max_force,
-        PARAMS.v_size,
-        PARAMS.color,
-        ev.value,
-        PARAMS.sur_radius
-      );
-    });
-  folder2
-    .addInput(PARAMS, "sur_radius", {
-      min: 50,
-      max: 500,
-      step: 1,
-    })
-    .on("change", (ev) => {
-      createVehicle(
-        vehicle.pos.x,
-        vehicle.pos.y,
-        PARAMS.max_speed,
-        PARAMS.max_force,
-        PARAMS.v_size,
-        PARAMS.color,
-        PARAMS.mag,
-        ev.value
-      );
-    });
+  folder2.addInput(PARAMS, "mag", {
+    min: 50,
+    max: 500,
+    step: 1,
+  });
+
+  folder2.addInput(PARAMS, "sur_radius", {
+    min: 50,
+    max: 500,
+    step: 1,
+  });
+
+  folder2.addInput(PARAMS, "jitter", {
+    min: 0.01,
+    max: 4,
+    step: 0.001,
+  });
   folder2.addInput(PARAMS, "trail");
   folder2.addInput(PARAMS, "trail_col");
 
@@ -156,26 +138,8 @@ function doubleClicked() {
   }
 }
 
-function createVehicle(
-  x,
-  y,
-  max_speed,
-  max_force,
-  size,
-  color,
-  wp_mag,
-  sur_radius
-) {
-  vehicle = new Vehicle(
-    x,
-    y,
-    max_speed,
-    max_force,
-    size,
-    color,
-    wp_mag,
-    sur_radius
-  );
+function createVehicle(x, y, max_speed, max_force, size, color) {
+  vehicle = new Vehicle(x, y, max_speed, max_force, size, color);
 }
 
 function setup() {
@@ -189,9 +153,7 @@ function setup() {
     PARAMS.max_speed,
     PARAMS.max_force,
     PARAMS.v_size,
-    PARAMS.v_color,
-    100,
-    PARAMS.sur_radius
+    PARAMS.v_color
   );
   background(0);
   // noLoop();
@@ -203,7 +165,7 @@ function draw() {
   }
   background(0);
   vehicle.wrap();
-  vehicle.wander(PARAMS.diagram);
-  vehicle.update(PARAMS.trail);
+  vehicle.wander(PARAMS.mag, PARAMS.sur_radius, PARAMS.diagram);
+  vehicle.update(PARAMS.jitter, PARAMS.trail);
   vehicle.show(PARAMS.trail, PARAMS.trail_col);
 }

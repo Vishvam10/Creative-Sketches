@@ -1,14 +1,5 @@
 class Vehicle {
-  constructor(
-    x,
-    y,
-    max_speed,
-    max_force,
-    size,
-    color = "#ffffff",
-    wp_mag,
-    wp_sur_rad
-  ) {
+  constructor(x, y, max_speed, max_force, size, color = "#ffffff") {
     this.pos = createVector(x, y);
     this.vel = createVector(0, 0);
     this.acc = createVector(0, 0);
@@ -17,17 +8,15 @@ class Vehicle {
     this.size = size;
     this.color = color;
 
-    this.wp_mag = wp_mag;
-    this.wp_sur_rad = wp_sur_rad / 2;
     this.theta = PI / 3 + this.vel.heading();
 
     this.cur_path = [];
     this.paths = [this.cur_path];
   }
 
-  wander(diagram) {
+  wander(wp_mag, wp_sur_rad, diagram) {
     let dir = this.vel.copy();
-    dir.setMag(this.wp_mag);
+    dir.setMag(wp_mag);
     dir.add(this.pos);
 
     if (diagram) {
@@ -48,12 +37,12 @@ class Vehicle {
       noFill();
       stroke(255);
       strokeWeight(1);
-      circle(dir.x, dir.y, this.wp_sur_rad);
+      circle(dir.x, dir.y, wp_sur_rad);
     }
 
     // Controlling Point
-    let x = (this.wp_sur_rad / 2) * cos(this.theta);
-    let y = (this.wp_sur_rad / 2) * sin(this.theta);
+    let x = (wp_sur_rad / 2) * cos(this.theta);
+    let y = (wp_sur_rad / 2) * sin(this.theta);
     dir.add(x, y);
     if (diagram) {
       noStroke();
@@ -75,13 +64,13 @@ class Vehicle {
     this.acc.add(force);
   }
 
-  update(trail = false, optimize = true, lim = 100) {
+  update(jitter = 0.1, trail = false, optimize = true, lim = 1000) {
     this.vel.add(this.acc);
     this.vel.limit(this.maxSpeed);
     this.pos.add(this.vel);
     this.acc.set(0, 0);
 
-    this.theta += random(-0.1, 0.1);
+    this.theta += random(-jitter, jitter);
     if (trail) {
       this.cur_path.push(this.pos.copy());
       if (optimize && frameCount % lim == 0) {
