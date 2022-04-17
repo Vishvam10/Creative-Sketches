@@ -44,7 +44,7 @@ const createPane = () => {
                 parseInt(ev.value),
                 PARAMS.max_force,
                 PARAMS.v_size,
-                PARAMS.color
+                PARAMS.v_color
             );
         });
     folder1
@@ -59,7 +59,7 @@ const createPane = () => {
                 PARAMS.max_speed,
                 parseInt(ev.value),
                 PARAMS.v_size,
-                PARAMS.color
+                PARAMS.v_color
             );
         });
     folder1
@@ -75,7 +75,7 @@ const createPane = () => {
                 PARAMS.max_speed,
                 PARAMS.max_force,
                 parseInt(ev.value),
-                PARAMS.color
+                PARAMS.v_color
             );
         });
     folder1.addInput(PARAMS, "v_color").on("change", (ev) => {
