@@ -32,7 +32,7 @@ class FlowField {
         row = (row + 1) % this.rows;
         column = (column + 1) % this.cols;
 
-        return this.field[row][column];
+        return this.field[row][column].copy();
     }
 
     show(diagram = true) {
