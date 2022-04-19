@@ -36,7 +36,6 @@ class Vehicle {
                 this.paths.shift();
             }
         }
-        console.log("LEN : ", this.paths.length);
     }
 
     show(trail = false, trail_col) {
@@ -53,13 +52,15 @@ class Vehicle {
         if (trail) {
             for (let path of this.paths) {
                 beginShape();
+                pop();
+                // setLineDash([5, 5]);
                 for (let v of path) {
-                    setLineDash([10, 10]);
                     strokeWeight(1);
                     noFill();
                     stroke(trail_col);
                     vertex(v.x, v.y);
                 }
+                push();
                 endShape();
             }
         }

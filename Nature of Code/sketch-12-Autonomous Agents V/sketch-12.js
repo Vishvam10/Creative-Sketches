@@ -6,9 +6,21 @@ const PARAMS = {
     trail: true,
     trail_col: "#ffffff",
 
+    color_scheme: "R",
+    resolution: 60,
+    force_limit: 25,
+    ang_inc: {
+        x: 0.1,
+        y: 0.1,
+    },
+
     diagram: true,
     pause: false,
 };
+
+var vehicle;
+var field;
+var width, height;
 
 const createPane = () => {
     const controlContainer = document.getElementById("controls");
@@ -17,11 +29,15 @@ const createPane = () => {
     });
 
     const tab = pane.addTab({
-        pages: [{ title: "Parameters" }, { title: "Optimization" }],
+        pages: [{ title: "Vehicle" }, { title: "Flow Field " }, { title: "Opt." }],
     });
 
     const folder1 = tab.pages[0].addFolder({
         title: "Vehicle",
+    });
+
+    const folder2 = tab.pages[1].addFolder({
+        title: "Flow Field Parameters",
     });
 
     const folder3 = tab.pages[0].addFolder({
@@ -85,13 +101,70 @@ const createPane = () => {
         );
     });
     folder1.addInput(PARAMS, "trail");
+    folder2
+        .addBlade({
+            view: "list",
+            label: "color_scheme",
+            options: [
+                { text: "Red", value: "R" },
+                { text: "Green", value: "G" },
+                { text: "Blue", value: "B" },
+            ],
+            value: "R",
+        })
+        .on("change", (ev) => {
+            PARAMS.color_scheme = ev.value;
+        });
+    folder2
+        .addInput(PARAMS, "resolution", {
+            min: 10,
+            max: 120,
+            step: 10,
+        })
+        .on("change", (ev) => {
+            createFlowField(width, height, ev.value, PARAMS.force_limit, PARAMS.inc);
+        });
+    folder2
+        .addInput(PARAMS, "force_limit", {
+            min: 1,
+            max: 40,
+            step: 1,
+        })
+        .on("change", (ev) => {
+            createFlowField(
+                width,
+                height,
+                PARAMS.resolution,
+                ev.value,
+                PARAMS.ang_inc
+            );
+        });
+    folder2
+        .addInput(PARAMS, "ang_inc", {
+            x: {
+                min: 0.01,
+                max: 4,
+                step: 0.01,
+            },
+            y: {
+                min: 0.01,
+                max: 4,
+                step: 0.01,
+            },
+        })
+        .on("change", (ev) => {
+            createFlowField(
+                width,
+                height,
+                PARAMS.resolution,
+                PARAMS.force_limit,
+                ev.value
+            );
+        });
 
+    folder2.addInput(PARAMS, "diagram");
     folder3.addInput(PARAMS, "pause");
-    folder3.addInput(PARAMS, "diagram");
 };
-
-var vehicle;
-var field;
 
 function drawForce(base, vec, color, arrowSize, diagram) {
     push();
@@ -108,7 +181,6 @@ function drawForce(base, vec, color, arrowSize, diagram) {
         text(v, 0, 20);
         pop();
     }
-    // line(0, 0, v.x, v.y);
     rotate(vec.heading());
     translate(v, 0);
     triangle(-arrowSize, -arrowSize / 2, -arrowSize, arrowSize / 2, arrowSize, 0);
@@ -132,8 +204,8 @@ function doubleClicked() {
     }
 }
 
-function createFlowField(width, height, res, direction, rand_dir = false) {
-    field = new FlowField(width, height, res, direction, rand_dir);
+function createFlowField(width, height, res, force_limit, inc) {
+    field = new FlowField(width, height, res, force_limit, inc);
 }
 
 function createVehicle(x, y, max_speed, max_force, size, color) {
@@ -142,8 +214,8 @@ function createVehicle(x, y, max_speed, max_force, size, color) {
 
 function setup() {
     createPane();
-    const width = windowWidth - 400;
-    const height = windowHeight - 50;
+    width = windowWidth - 400;
+    height = windowHeight - 50;
     createCanvas(width, height);
     createVehicle(
         width / 2,
@@ -153,7 +225,13 @@ function setup() {
         PARAMS.v_size,
         PARAMS.v_color
     );
-    createFlowField(width, height, 60, 0, (rand_dir = false));
+    createFlowField(
+        width,
+        height,
+        PARAMS.resolution,
+        PARAMS.force_limit,
+        PARAMS.ang_inc
+    );
     background(0);
     // noLoop();
 }
@@ -163,7 +241,8 @@ function draw() {
         return;
     }
     background(0);
-    field.show(PARAMS.diagram);
+    console.log(PARAMS.color_scheme);
+    field.show(PARAMS.diagram, PARAMS.color_scheme);
 
     vehicle.wrap();
 
