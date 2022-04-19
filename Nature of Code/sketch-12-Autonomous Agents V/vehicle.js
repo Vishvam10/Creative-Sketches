@@ -16,7 +16,7 @@ class Vehicle {
         let desired = field.lookup(this.pos);
         desired.mult(this.maxSpeed);
         let steer = p5.Vector.sub(desired, this.vel);
-        // steer.limit(this.maxForce);
+        steer.limit(this.maxForce);
         return steer;
     }
 
@@ -38,7 +38,7 @@ class Vehicle {
         }
     }
 
-    show(trail = false, trail_col) {
+    show(trail = false, trail_col = "#ffffff") {
         fill(this.color);
         push();
         translate(this.pos.x, this.pos.y);

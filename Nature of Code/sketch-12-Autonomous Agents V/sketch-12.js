@@ -6,15 +6,15 @@ const PARAMS = {
     trail: true,
     trail_col: "#ffffff",
 
-    color_scheme: "R",
-    resolution: 60,
+    color: "R",
+    res: 59,
     force_limit: 25,
     ang_inc: {
         x: 0.1,
         y: 0.1,
     },
 
-    diagram: true,
+    show_mag: true,
     pause: false,
 };
 
@@ -29,7 +29,7 @@ const createPane = () => {
     });
 
     const tab = pane.addTab({
-        pages: [{ title: "Vehicle" }, { title: "Flow Field " }, { title: "Opt." }],
+        pages: [{ title: "Vehicle" }, { title: "Flow Field " }],
     });
 
     const folder1 = tab.pages[0].addFolder({
@@ -37,7 +37,7 @@ const createPane = () => {
     });
 
     const folder2 = tab.pages[1].addFolder({
-        title: "Flow Field Parameters",
+        title: "Flow Field",
     });
 
     const folder3 = tab.pages[0].addFolder({
@@ -51,8 +51,8 @@ const createPane = () => {
         })
         .on("change", (ev) => {
             createVehicle(
-                width / 2,
-                height / 2,
+                vehicle.pos.x,
+                vehicle.pos.y,
                 parseInt(ev.value),
                 PARAMS.max_force,
                 PARAMS.v_size,
@@ -101,10 +101,11 @@ const createPane = () => {
         );
     });
     folder1.addInput(PARAMS, "trail");
+    folder1.addInput(PARAMS, "trail_col");
     folder2
         .addBlade({
             view: "list",
-            label: "color_scheme",
+            label: "color",
             options: [
                 { text: "Red", value: "R" },
                 { text: "Green", value: "G" },
@@ -113,13 +114,13 @@ const createPane = () => {
             value: "R",
         })
         .on("change", (ev) => {
-            PARAMS.color_scheme = ev.value;
+            PARAMS.color = ev.value;
         });
     folder2
-        .addInput(PARAMS, "resolution", {
-            min: 10,
+        .addInput(PARAMS, "res", {
+            min: 30,
             max: 120,
-            step: 10,
+            step: 1,
         })
         .on("change", (ev) => {
             createFlowField(width, height, ev.value, PARAMS.force_limit, PARAMS.inc);
@@ -131,49 +132,37 @@ const createPane = () => {
             step: 1,
         })
         .on("change", (ev) => {
-            createFlowField(
-                width,
-                height,
-                PARAMS.resolution,
-                ev.value,
-                PARAMS.ang_inc
-            );
+            createFlowField(width, height, PARAMS.res, ev.value, PARAMS.ang_inc);
         });
     folder2
         .addInput(PARAMS, "ang_inc", {
             x: {
-                min: 0.01,
+                min: -4,
                 max: 4,
                 step: 0.01,
             },
             y: {
-                min: 0.01,
+                min: -4,
                 max: 4,
                 step: 0.01,
             },
         })
         .on("change", (ev) => {
-            createFlowField(
-                width,
-                height,
-                PARAMS.resolution,
-                PARAMS.force_limit,
-                ev.value
-            );
+            createFlowField(width, height, PARAMS.res, PARAMS.force_limit, ev.value);
         });
 
-    folder2.addInput(PARAMS, "diagram");
+    folder2.addInput(PARAMS, "show_mag");
     folder3.addInput(PARAMS, "pause");
 };
 
-function drawForce(base, vec, color, arrowSize, diagram) {
+function drawForce(base, vec, color, arrowSize, show_mag) {
     push();
     stroke(color);
     strokeWeight(1);
     fill(color);
     let v = round(map(vec.mag(), 0, 40, 0, 1), 2);
     translate(base.x, base.y);
-    if (diagram) {
+    if (show_mag) {
         push();
         textSize(12);
         fill(255, 255, 255, 50);
@@ -228,7 +217,7 @@ function setup() {
     createFlowField(
         width,
         height,
-        PARAMS.resolution,
+        PARAMS.res,
         PARAMS.force_limit,
         PARAMS.ang_inc
     );
@@ -241,8 +230,8 @@ function draw() {
         return;
     }
     background(0);
-    console.log(PARAMS.color_scheme);
-    field.show(PARAMS.diagram, PARAMS.color_scheme);
+    console.log(PARAMS.color);
+    field.show(PARAMS.show_mag, PARAMS.color);
 
     vehicle.wrap();
 
