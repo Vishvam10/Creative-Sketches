@@ -1,12 +1,12 @@
 class CA {
-    constructor(width, height, res) {
+    constructor(width, height, res, grid_spacing = 1) {
         this.grid = [];
         this.width = width;
         this.height = height;
         this.res = res;
         this.rows = parseInt(this.width / this.res);
         this.cols = parseInt(this.height / this.res);
-
+        this.grid_spacing = grid_spacing;
         for (let i = 0; i < this.cols; i++) {
             this.grid[i] = [];
             for (let j = 0; j < this.rows; j++) {
@@ -14,19 +14,23 @@ class CA {
             }
         }
     }
-    show() {
+    show(color1 = "#0000ff", color2 = "#ffffff", outline = true) {
         for (let i = 0; i < this.cols; i++) {
             for (let j = 0; j < this.rows; j++) {
-                let x = i * this.res;
-                let y = j * this.res;
+                let x = i * this.res * this.grid_spacing;
+                let y = j * this.res * this.grid_spacing;
                 if (this.grid[i][j] == 0) {
-                    fill(0, 0, 255);
+                    fill(color1);
                 } else {
-                    fill(255);
+                    fill(color2);
                 }
-                stroke(0);
-                strokeWeight(0.5);
-                rect(x, y, this.res - 1, this.res - 1);
+                if (outline) {
+                    stroke(0);
+                    strokeWeight(0.5);
+                } else {
+                    noStroke();
+                }
+                rect(x, y, this.res, this.res);
             }
         }
     }
