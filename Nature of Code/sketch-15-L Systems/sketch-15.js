@@ -27,7 +27,6 @@ function generate() {
         }
     }
     sentence = nextSentence;
-    createP(sentence);
     turtle();
 }
 
@@ -55,7 +54,9 @@ function turtle() {
 }
 
 function setup() {
-    createCanvas(400, 400);
+    width = windowWidth - 400;
+    height = windowHeight - 50;
+    createCanvas(width, height);
     angle = radians(25);
     background(51);
     createP(axiom);
