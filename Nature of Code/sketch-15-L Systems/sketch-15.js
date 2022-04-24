@@ -3,10 +3,10 @@ const PARAMS = {
     angle: 25,
     generation: 0,
     color: {
-        r: 255,
-        g: 217,
-        b: 81,
-        a: 0.43,
+        r: 26,
+        g: 255,
+        b: 0,
+        a: 0.5,
     },
     line_wt: 0.5,
     pause: false,
@@ -36,6 +36,7 @@ const createPane = () => {
         });
     folder1.addMonitor(PARAMS, "generation");
 
+    folder1.addInput(PARAMS, "color");
     folder1.addInput(PARAMS, "angle", {
         min: -180,
         max: 180,
@@ -45,7 +46,6 @@ const createPane = () => {
         max: 0.99,
         step: 0.001,
     });
-    folder1.addInput(PARAMS, "color");
     folder1.addInput(PARAMS, "line_wt", {
         min: 0.1,
         max: 8,
