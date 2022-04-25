@@ -10,6 +10,7 @@ Ref : https://en.wikipedia.org/wiki/Mandelbrot_set
 const PARAMS = {
     minVal: -2.5,
     maxVal: 2.5,
+    max_iter: 100,
     frameRate: 0,
     pause: false,
     generation: 0,
@@ -39,10 +40,18 @@ const createPane = () => {
         max: 10,
         step: 0.01,
     });
+    folder1.addInput(PARAMS, "max_iter", {
+        min: 1,
+        max: 300,
+        step: 1,
+    });
     folder2.addMonitor(PARAMS, "frameRate", {
         view: "graph",
         min: 1,
         max: 90,
+    });
+    folder2.addMonitor(PARAMS, "frameRate", {
+        label: "",
     });
     folder2.addInput(PARAMS, "pause");
 };
@@ -56,7 +65,7 @@ function setup() {
 }
 
 function draw() {
-    var maxiterations = 100;
+    var maxiterations = PARAMS.max_iter;
 
     loadPixels();
     for (var x = 0; x < width; x++) {
@@ -81,17 +90,17 @@ function draw() {
                 n++;
             }
 
-            var bright = map(n, 0, maxiterations, 0, 1);
-            bright = map(sqrt(bright), 0, 1, 0, 255);
+            var brightness = map(n, 0, maxiterations, 0, 1);
+            brightness = map(sqrt(brightness), 0, 1, 0, 255);
 
             if (n == maxiterations) {
-                bright = 0;
+                brightness = 0;
             }
 
             var pix = (x + y * width) * 4;
-            pixels[pix + 0] = bright;
-            pixels[pix + 1] = bright;
-            pixels[pix + 2] = bright;
+            pixels[pix + 0] = brightness;
+            pixels[pix + 1] = brightness;
+            pixels[pix + 2] = brightness;
             pixels[pix + 3] = 255;
         }
     }
