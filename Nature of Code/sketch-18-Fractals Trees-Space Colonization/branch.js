@@ -5,10 +5,9 @@ class Branch {
         this.dir = dir;
         this.originalDir = this.dir.copy();
         this.count = 0;
-        this.len = 10;
     }
-    next() {
-        let nextDir = p5.Vector.mult(this.dir, this.len);
+    next(len) {
+        let nextDir = p5.Vector.mult(this.dir, len);
         let nextPos = p5.Vector.add(this.pos, nextDir);
         let nextBranch = new Branch(this, nextPos, this.dir.copy());
         return nextBranch;
@@ -16,10 +15,10 @@ class Branch {
     reset() {
         this.dir = this.originalDir.copy();
     }
-    show() {
+    show(color, line_wt = 2) {
         if (this.parent != null) {
-            stroke(255);
-            strokeWeight(1);
+            stroke(color);
+            strokeWeight(line_wt);
             line(this.pos.x, this.pos.y, this.parent.pos.x, this.parent.pos.y);
         }
     }

@@ -4,7 +4,7 @@ class Leaf {
         this.reached = false;
     }
     show() {
-        fill(255);
+        fill(0, 255, 0);
         noStroke();
         circle(this.pos.x, this.pos.y, 4);
     }
