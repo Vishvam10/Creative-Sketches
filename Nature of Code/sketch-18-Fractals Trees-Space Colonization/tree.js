@@ -32,7 +32,7 @@ class Tree {
         }
     }
 
-    grow(strength = 1, min_dist, max_dist) {
+    grow(strength = 8, min_dist, max_dist) {
         for (let i = 0; i < this.leaves.length; i++) {
             let leaf = this.leaves[i];
             let closestBranch = null;
@@ -96,12 +96,12 @@ class Tree {
         }
     }
 
-    show(color = "#ffffff", line_wt) {
+    show(b_color = "#ffffff", l_color = "#00ff00", line_wt) {
         for (let i = 0; i < this.leaves.length; i++) {
-            this.leaves[i].show(color);
+            this.leaves[i].show(l_color);
         }
         for (let i = 0; i < this.branches.length; i++) {
-            this.branches[i].show(color, line_wt);
+            this.branches[i].show(b_color, line_wt);
         }
     }
 }

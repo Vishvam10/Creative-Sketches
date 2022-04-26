@@ -1,8 +1,9 @@
 const PARAMS = {
-    min_dist: 2,
+    min_dist: 10,
     max_dist: 100,
-    strength: 4,
-    color: "#822500",
+    strength: 8,
+    b_color: "#de3b00",
+    t_color: "#0dbd00",
     line_wt: 2,
 
     optimize: false,
@@ -10,6 +11,7 @@ const PARAMS = {
 
     frameRate: 0,
     branches: 1,
+    leaves: 200,
     pause: false,
 };
 
@@ -50,7 +52,8 @@ const createPane = () => {
         step: 0.1,
     });
 
-    folder1.addInput(PARAMS, "color");
+    folder1.addInput(PARAMS, "b_color");
+    folder1.addInput(PARAMS, "t_color");
     folder1.addInput(PARAMS, "line_wt", {
         min: 1,
         max: 10,
@@ -83,15 +86,22 @@ const createPane = () => {
     folder2.addMonitor(PARAMS, "frameRate", {
         label: "",
     });
-    const branches_graph = folder2.addMonitor(PARAMS, "branches", {
-        disabled: true,
+    folder2.addMonitor(PARAMS, "branches", {
         view: "graph",
         min: 10,
         max: 1000,
     });
-    const no_of_branches_100 = folder2.addMonitor(PARAMS, "branches", {
+    folder2.addMonitor(PARAMS, "branches", {
         disabled: true,
         label: "x100",
+    });
+    folder2.addMonitor(PARAMS, "leaves", {
+        view: "graph",
+        min: 0,
+        max: 200,
+    });
+    folder2.addMonitor(PARAMS, "leaves", {
+        label: "",
     });
     folder3.addInput(PARAMS, "pause");
 };
@@ -118,7 +128,7 @@ function draw() {
     }
 
     if (tree.leaves.length > 0) {
-        tree.show(PARAMS.color, PARAMS.line_wt);
+        tree.show(PARAMS.b_color, PARAMS.t_color, PARAMS.line_wt);
         if (PARAMS.min_dist < PARAMS.max_dist) {
             tree.grow(PARAMS.strength, PARAMS.min_dist, PARAMS.max_dist);
         } else {
@@ -126,5 +136,8 @@ function draw() {
         }
         PARAMS.frameRate = floor(frameRate());
         PARAMS.branches = floor(tree.branches.length / 100);
+        PARAMS.leaves = floor(tree.leaves.length);
+    } else {
+        tree.show(PARAMS.b_color, PARAMS.t_color, PARAMS.line_wt);
     }
 }

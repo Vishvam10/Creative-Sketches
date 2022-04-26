@@ -3,8 +3,8 @@ class Leaf {
         this.pos = createVector(random(width), random(height - 200));
         this.reached = false;
     }
-    show() {
-        fill(0, 255, 0);
+    show(color) {
+        fill(color);
         noStroke();
         circle(this.pos.x, this.pos.y, 4);
     }
