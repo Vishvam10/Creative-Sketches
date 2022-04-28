@@ -9,7 +9,7 @@ const PARAMS = {
     damping: 2,
 
     frameRate: 0,
-    optimize: true,
+    optimize: false,
     freq: 2,
 
     color: "#6200ff",
@@ -18,6 +18,7 @@ const PARAMS = {
     p_trail: true,
     p_t_wt: 1,
     gen_trail: 400,
+    orb_ctrl: false,
     pause: false,
 };
 
@@ -85,6 +86,7 @@ const createPane = () => {
         step: 0.01,
     });
     folder1.addInput(PARAMS, "show_p");
+    folder1.addInput(PARAMS, "orb_ctrl");
     folder1.addInput(PARAMS, "pause");
 
     folder2.addInput(PARAMS, "color");
@@ -148,15 +150,14 @@ function setup() {
 var pos = [];
 var trail_type = "line";
 
-function mousePressed() {
-    console.log("PRESSED : ", mouseX, mouseY);
-}
-
 function draw() {
     if (PARAMS.pause) {
         return;
     }
     background(0);
+    if (PARAMS.orb_ctrl) {
+        orbitControl();
+    }
     scale(5);
 
     let dt = PARAMS.dt;
