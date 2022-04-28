@@ -6,20 +6,20 @@ const PARAMS = {
     mass1: 50,
     mass2: 10,
     g: 1,
-    v_damping: 0.3,
-    a_damping: 0.3,
+    v_damping: 2,
+    a_damping: 2,
 
     frameRate: 0,
-    points1: 0,
-    points2: 0,
 
-    color1: "#215dff",
+    color1: "#6200ff",
     color2: "#00aaff",
     show_rod: true,
     show_b1: true,
     show_b2: true,
     b1_trail: false,
     b2_trail: true,
+    b1_t_wt: 1.5,
+    b2_t_wt: 1.5,
     gen_trail: 400,
     pause: false,
 };
@@ -35,7 +35,7 @@ const createPane = () => {
     pane.registerPlugin(TweakpaneEssentialsPlugin);
 
     const tab = pane.addTab({
-        pages: [{ title: "System" }, { title: "Optim." }],
+        pages: [{ title: "System" }, { title: "Appear." }, { title: "Opt." }],
     });
 
     const folder1 = tab.pages[0].addFolder({
@@ -43,6 +43,9 @@ const createPane = () => {
     });
     const folder2 = tab.pages[1].addFolder({
         title: "General",
+    });
+    const folder3 = tab.pages[2].addFolder({
+        title: "Optimization",
     });
 
     folder1.addInput(PARAMS, "length1", {
@@ -83,53 +86,78 @@ const createPane = () => {
         step: 0.1,
     });
     folder1.addInput(PARAMS, "v_damping", {
-        min: 0,
-        max: 1,
-        step: 0.01,
+        min: 1,
+        max: 50,
+        step: 0.1,
     });
     folder1.addInput(PARAMS, "a_damping", {
-        min: 0,
-        max: 1,
+        min: 1,
+        max: 50,
         step: 0.01,
     });
     folder1.addInput(PARAMS, "show_rod");
     folder1.addInput(PARAMS, "show_b1");
     folder1.addInput(PARAMS, "show_b2");
+    folder1.addInput(PARAMS, "pause");
+
     folder2.addInput(PARAMS, "color1");
     folder2.addInput(PARAMS, "color2");
 
-    folder2.addMonitor(PARAMS, "frameRate", {
+    folder3.addMonitor(PARAMS, "frameRate", {
         view: "graph",
         min: 1,
         max: 90,
     });
-    folder2.addMonitor(PARAMS, "frameRate", {
+    folder3.addMonitor(PARAMS, "frameRate", {
         label: "",
     });
-    folder2.addMonitor(PARAMS, "points1", {
-        view: "graph",
-        min: 1,
-        max: 500,
-    });
-    folder2.addMonitor(PARAMS, "points1", {
-        label: "",
-    });
-    folder2.addMonitor(PARAMS, "points2", {
-        view: "graph",
-        min: 1,
-        max: 500,
-    });
-    folder2.addMonitor(PARAMS, "points2", {
-        label: "",
-    });
+
     folder2.addInput(PARAMS, "gen_trail", {
         min: -200,
         max: 400,
         step: 1,
     });
+    folder2
+        .addBlade({
+            view: "list",
+            label: "trail_ch",
+            options: [
+                { text: "line", value: "line" },
+                { text: "points", value: "points" },
+            ],
+            value: "line",
+        })
+        .on("change", (ev) => {
+            trail_type = ev.value;
+        });
     folder2.addInput(PARAMS, "b1_trail");
     folder2.addInput(PARAMS, "b2_trail");
-    folder1.addInput(PARAMS, "pause");
+    folder2.addInput(PARAMS, "b1_t_wt", {
+        min: 0.1,
+        max: 20,
+        step: 0.01,
+    });
+    folder2.addInput(PARAMS, "b2_t_wt", {
+        min: 0.1,
+        max: 20,
+        step: 0.01,
+    });
+    folder2
+        .addButton({
+            title: "clear",
+            label: "b1_trail",
+        })
+        .on("click", () => {
+            pos1 = [];
+        });
+    folder2
+        .addButton({
+            title: "clear",
+            label: "b2_trail",
+        })
+        .on("click", () => {
+            pos2 = [];
+        });
 };
 
 function setup() {
@@ -144,8 +172,9 @@ function setup() {
     background(0);
 }
 
-let pos1 = [];
-let pos2 = [];
+var pos1 = [];
+var pos2 = [];
+var trail_type = "points";
 
 function draw() {
     if (PARAMS.pause) {
@@ -196,25 +225,44 @@ function draw() {
         let p1 = createVector(x1, y1);
         pos1.push(p1);
         noFill();
-        beginShape();
-        PARAMS.points1 = pos1.length;
-        for (let p of pos1) {
-            stroke(PARAMS.color1);
-            vertex(p.x, p.y);
+        if (trail_type == "line") {
+            beginShape();
+            PARAMS.points1 = pos1.length;
+            for (let p of pos1) {
+                stroke(PARAMS.color1);
+                strokeWeight(PARAMS.b1_t_wt);
+                vertex(p.x, p.y);
+            }
+            endShape();
+        } else {
+            PARAMS.points1 = pos1.length;
+            for (let p of pos1) {
+                stroke(PARAMS.color1);
+                strokeWeight(PARAMS.b1_t_wt);
+                point(p.x, p.y);
+            }
         }
-        endShape();
     }
     if (PARAMS.b2_trail) {
         let p2 = createVector(x2, y2);
         pos2.push(p2);
         PARAMS.points2 = pos2.length;
         noFill();
-        beginShape();
-        for (let p of pos2) {
-            stroke(PARAMS.color2);
-            vertex(p.x, p.y);
+        if (trail_type == "line") {
+            beginShape();
+            for (let p of pos2) {
+                stroke(PARAMS.color2);
+                strokeWeight(PARAMS.b2_t_wt);
+                vertex(p.x, p.y);
+            }
+            endShape();
+        } else {
+            for (let p of pos2) {
+                stroke(PARAMS.color2);
+                strokeWeight(PARAMS.b2_t_wt);
+                point(p.x, p.y);
+            }
         }
-        endShape();
     }
 
     noFill();
@@ -241,10 +289,10 @@ function draw() {
         circle(x2, y2, sqrt(PARAMS.mass2) * 2);
     }
 
-    a1_v += a1_a * PARAMS.a_damping;
-    a2_v += a2_a * PARAMS.a_damping;
-    PARAMS.angle1 += a1_v * PARAMS.v_damping;
-    PARAMS.angle2 += a2_v * PARAMS.v_damping;
+    a1_v += a1_a / PARAMS.a_damping;
+    a2_v += a2_a / PARAMS.a_damping;
+    PARAMS.angle1 += a1_v / PARAMS.v_damping;
+    PARAMS.angle2 += a2_v / PARAMS.v_damping;
 
     PARAMS.frameRate = floor(frameRate());
 }
