@@ -13,10 +13,10 @@ const PARAMS = {
     freq: 2,
 
     color: "#6200ff",
-    rainbow: true,
+    rainbow: false,
     show_p: true,
     p_trail: true,
-    p_t_wt: 1,
+    p_t_wt: 0.5,
     gen_trail: 400,
     orb_ctrl: false,
     pause: false,
@@ -88,6 +88,16 @@ const createPane = () => {
     folder1.addInput(PARAMS, "show_p");
     folder1.addInput(PARAMS, "orb_ctrl");
     folder1.addInput(PARAMS, "pause");
+    tab.pages[0]
+        .addButton({
+            title: "clear",
+            label: "",
+        })
+        .on("click", (ev) => {
+            clear();
+            pos = [];
+            background(0);
+        });
 
     folder2.addInput(PARAMS, "color");
     folder2.addInput(PARAMS, "rainbow");
