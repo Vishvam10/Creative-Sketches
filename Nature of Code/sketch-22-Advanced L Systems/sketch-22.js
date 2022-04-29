@@ -7,7 +7,7 @@ const PARAMS = {
         r: 26,
         g: 255,
         b: 0,
-        a: 0.5,
+        a: 0.8,
     },
     line_wt: 0.5,
     pause: false,
@@ -21,14 +21,12 @@ const createPane = () => {
         container: controlContainer,
     });
 
-    const folder1 = pane.addFolder({
-        title: "Initialize",
+    const tab = pane.addTab({
+        pages: [{ title: "Initialize" }, { title: "Parameters" }],
     });
-    const folder2 = folder1.addFolder({
+
+    const folder2 = tab.pages[0].addFolder({
         title: "Rules",
-    });
-    const folder3 = pane.addFolder({
-        title: "General",
     });
 
     folder2
@@ -48,21 +46,20 @@ const createPane = () => {
                 .on("change", (ev) => {
                     console.log("NEW RULE : ", ev.value.replace(/\s/g, "").split("->"));
                     let val = ev.value.replace(/\s/g, "").split("->");
-                    let lhs = val[0],
-                        rhs = val[1];
+                    let lhs = val[0].toUpperCase(),
+                        rhs = val[1].toUpperCase();
                     let rule = {
                         lhs,
                         rhs,
                     };
-                    // FF+[+F-F-F]-[-F+F+F]
-                    rules[PARAMS.rules - 1] = rule;
+                    rules.push(rule);
                 });
             rule_blades.push(r);
         });
     folder2
         .addButton({
             title: "Delete",
-            label: "last rule",
+            label: "",
         })
         .on("click", () => {
             PARAMS.rules -= 1;
@@ -71,9 +68,9 @@ const createPane = () => {
             ele.parentNode.removeChild(ele);
         });
 
-    folder1
+    tab.pages[0]
         .addButton({
-            title: "next",
+            title: "Next",
             label: "generation",
         })
         .on("click", () => {
@@ -81,27 +78,38 @@ const createPane = () => {
             updateGeneration();
         });
 
-    folder1.addMonitor(PARAMS, "generation", {
+    tab.pages[0].addMonitor(PARAMS, "generation", {
         label: "",
     });
 
-    folder1.addInput(PARAMS, "color");
-    folder1.addInput(PARAMS, "angle", {
+    tab.pages[1].addInput(PARAMS, "color");
+    tab.pages[1].addInput(PARAMS, "angle", {
         min: -180,
         max: 180,
+        step: 0.01,
     });
-    folder1.addInput(PARAMS, "dec_fact", {
+    tab.pages[1].addInput(PARAMS, "dec_fact", {
         min: 0.01,
         max: 0.99,
         step: 0.001,
     });
-    folder1.addInput(PARAMS, "line_wt", {
+    tab.pages[1].addInput(PARAMS, "line_wt", {
         min: 0.1,
         max: 8,
         step: 0.01,
     });
 
-    folder3.addInput(PARAMS, "pause");
+    tab.pages[0].addInput(PARAMS, "pause");
+    tab.pages[0]
+        .addButton({
+            title: "clear",
+            label: "",
+        })
+        .on("click", (ev) => {
+            clear();
+            background(0);
+            turtle();
+        });
 };
 
 var angle;
@@ -117,6 +125,7 @@ function updateGeneration() {
     for (var i = 0; i < sentence.length; i++) {
         var current = sentence.charAt(i);
         var found = false;
+        console.log(rules);
         for (var j = 0; j < rules.length; j++) {
             if (current == rules[j].lhs) {
                 found = true;
