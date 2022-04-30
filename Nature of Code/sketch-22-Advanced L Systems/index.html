@@ -101,6 +101,7 @@
         overflow: hidden;
         background-color: rgb(0, 0, 0);
         background-color: rgba(0, 0, 0, 0.4);
+        /* animation: popup 0.7s; */
     }
     
     .modal-content {
@@ -110,6 +111,7 @@
         border-radius: 1rem;
         width: 25%;
         height: max-content;
+        animation: popup 0.7s;
     }
     
     .close {
@@ -127,6 +129,18 @@
         color: black;
         text-decoration: none;
         cursor: pointer;
+    }
+    
+    @keyframes popup {
+        0% {
+            transform: scale(0);
+        }
+        50% {
+            transform: scale(1.05);
+        }
+        100% {
+            transform: scale(1);
+        }
     }
 </style>
 
