@@ -3,7 +3,7 @@ const PARAMS = {
     line_wt: 1,
     color: "#ffffff",
     rainbow: false,
-    show_pt: true,
+    show_pt: false,
     animate: false,
     speed: 1,
     frameRate: 0,
