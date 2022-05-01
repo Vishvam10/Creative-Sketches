@@ -55,6 +55,11 @@ const createPane = () => {
         clear();
         background(0);
     });
+    folder1.addInput(PARAMS, "speed", {
+        min: 1,
+        max: 50,
+        step: 1,
+    });
     folder1.addInput(PARAMS, "show_pt");
     folder1.addInput(PARAMS, "pause");
 };
@@ -148,7 +153,7 @@ function draw() {
             }
             line(paths[i].x, paths[i].y, paths[i - 1].x, paths[i - 1].y)
         }
-        counter += 1;
+        counter += PARAMS.speed;
         if (counter >= paths.length) {
             counter = 0
         }
