@@ -4,7 +4,7 @@ const PARAMS = {
     color: "#ffffff",
     rainbow: false,
     show_pt: false,
-    animate: false,
+    animate: true,
     speed: 1,
     frameRate: 0,
     pause: false,
@@ -176,4 +176,5 @@ function draw() {
             text(i, paths[i].x + 5, paths[i].y)
         }
     }
+    PARAMS.frameRate = floor(frameRate())
 }
