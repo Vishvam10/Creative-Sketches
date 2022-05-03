@@ -1,15 +1,16 @@
 const PARAMS = {
-    dA: 0.8,
+    dA: 0.98,
     dB: 2.05,
     dt: 1,
     feed: 0.055,
     k: 0.062,
     line_wt: 1,
     color: {
-        r: 0,
-        g: 69,
-        b: 99
+        r: 1,
+        g: 124,
+        b: 102
     },
+    gradient: true,
     frameRate: 0,
     pause: false,
 };
@@ -56,6 +57,8 @@ const createPane = () => {
         max: 5,
         step: 0.01,
     });
+    folder1.addInput(PARAMS, "color")
+    folder1.addInput(PARAMS, "gradient")
     folder1.addMonitor(PARAMS, "frameRate", {
         view: "graph",
         min: 1,
@@ -64,7 +67,6 @@ const createPane = () => {
     folder1.addMonitor(PARAMS, "frameRate", {
         label: "",
     });
-
     folder1.addInput(PARAMS, "pause");
 };
 
@@ -99,7 +101,6 @@ function setup() {
     pixelDensity(1);
     grid = [];
     next = [];
-    translate(width / 2, height / 2)
     for (var x = 0; x < width; x++) {
         grid[x] = [];
         next[x] = [];
@@ -115,8 +116,8 @@ function setup() {
         }
     }
 
-    for (var i = 100; i < 200; i++) {
-        for (var j = 100; j < 200; j++) {
+    for (var i = floor(width / 2); i < floor(width / 2) + 50; i++) {
+        for (var j = floor(height / 2); j < floor(height / 2) + 50; j++) {
             grid[i][j].b = 1;
         }
     }
@@ -152,6 +153,13 @@ function draw() {
             pixels[pix + 1] = PARAMS.color.g;
             pixels[pix + 2] = PARAMS.color.b;
             pixels[pix + 3] = c1;
+        }
+        if (PARAMS.gradient) {
+            PARAMS.color.r = PARAMS.color.r + 1
+            if (PARAMS.color.r > 255) {
+                PARAMS.color.r -= 1
+            }
+
         }
     }
     updatePixels();
