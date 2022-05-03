@@ -3,7 +3,6 @@ const PARAMS = {
     line_wt: 1,
     color: "#ffffff",
     rainbow: false,
-    show_pt: false,
     animate: true,
     speed: 1,
     frameRate: 0,
@@ -32,6 +31,7 @@ const createPane = () => {
     }).on("change", (ev) => {
         n = Math.pow(2, PARAMS.order);
         total = n * n
+        paths = []
         clear();
         background(0);
         initalize();
@@ -60,7 +60,6 @@ const createPane = () => {
         max: 50,
         step: 1,
     });
-    folder1.addInput(PARAMS, "show_pt");
     folder1.addInput(PARAMS, "pause");
 };
 
@@ -140,6 +139,7 @@ function draw() {
     if (PARAMS.pause) {
         return;
     }
+    console.log(paths);
     background(0);
     noFill();
     stroke(PARAMS.color);
@@ -168,13 +168,6 @@ function draw() {
             vertex(paths[i].x, paths[i].y)
         }
         endShape();
-    }
-    if (PARAMS.show_pt) {
-        textSize(24 / PARAMS.order);
-        for (let i = 0; i < paths.length; i++) {
-            point(paths[i].x, paths[i].x)
-            text(i, paths[i].x + 5, paths[i].y)
-        }
     }
     PARAMS.frameRate = floor(frameRate())
 }

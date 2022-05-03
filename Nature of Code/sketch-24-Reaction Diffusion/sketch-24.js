@@ -6,13 +6,12 @@ const PARAMS = {
     k: 0.062,
     line_wt: 1,
     color: {
-        r: 1,
+        r: 255,
         g: 124,
         b: 102
     },
-    gradient: true,
     frameRate: 0,
-    pause: false,
+    pause: true,
 };
 
 var n = Math.pow(2, PARAMS.order)
@@ -58,7 +57,6 @@ const createPane = () => {
         step: 0.01,
     });
     folder1.addInput(PARAMS, "color")
-    folder1.addInput(PARAMS, "gradient")
     folder1.addMonitor(PARAMS, "frameRate", {
         view: "graph",
         min: 1,
@@ -153,13 +151,6 @@ function draw() {
             pixels[pix + 1] = PARAMS.color.g;
             pixels[pix + 2] = PARAMS.color.b;
             pixels[pix + 3] = c1;
-        }
-        if (PARAMS.gradient) {
-            PARAMS.color.r = PARAMS.color.r + 1
-            if (PARAMS.color.r > 255) {
-                PARAMS.color.r -= 1
-            }
-
         }
     }
     updatePixels();
