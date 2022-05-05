@@ -1,9 +1,12 @@
 const PARAMS = {
+    width: 200,
+    height: 200,
     n: 8,
     init_p: 4,
-    p_color: "#ffffff",
 
-    animate: true,
+    show_p: true,
+    p_size: 8,
+    p_color: "#ffffff",
 
     frameRate: 0,
     o_trail: 100,
@@ -20,19 +23,32 @@ const createPane = () => {
         container: controlContainer,
     });
 
-    const tab = pane.addTab({
-        pages: [{ title: "Params" }, { title: "Animate" }],
-    });
-
-
-    const folder1 = tab.pages[0].addFolder({
+    const folder1 = pane.addFolder({
         title: "Parameters",
     })
-    const folder2 = tab.pages[0].addFolder({
+    const folder2 = pane.addFolder({
         title: "General",
     })
 
 
+    folder1.addInput(PARAMS, "width", {
+        min: 100,
+        max: 800,
+        step: 1
+    }).on("change", (ev) => {
+        clear();
+        background(0);
+        initalize(ev.value, PARAMS.height);
+    })
+    folder1.addInput(PARAMS, "height", {
+        min: 100,
+        max: 1200,
+        step: 1
+    }).on("change", (ev) => {
+        clear();
+        background(0);
+        initalize(PARAMS.width, ev.value);
+    })
     folder1.addInput(PARAMS, "init_p", {
         min: 0,
         max: 20,
@@ -51,8 +67,30 @@ const createPane = () => {
         background(0);
         initalize()
     })
+    folder1.addInput(PARAMS, "show_p").on("change", (ev) => {
+        if (ev.value) {
+            p_s.disabled = false
+            p_c.disabled = false
+        } else {
+            p_s.disabled = true
+            p_c.disabled = true
+        }
+    })
 
-    folder1.addInput(PARAMS, "p_color")
+    const p_s = folder1.addInput(PARAMS, "p_size", {
+        disabled: true,
+        min: 0.1,
+        max: 20,
+        step: 0.1
+    }).on("change", (ev) => {
+        clear();
+        background(0);
+        initalize()
+    })
+    const p_c = folder1.addInput(PARAMS, "p_color", {
+        disabled: true
+    })
+
     folder2.addMonitor(PARAMS, "frameRate", {
         view: "graph",
         min: 1,
@@ -61,7 +99,6 @@ const createPane = () => {
     folder2.addMonitor(PARAMS, "frameRate", {
         label: "",
     });
-    folder2.addInput(PARAMS, "animate")
     folder2.addInput(PARAMS, "pause");
 
 }
@@ -69,8 +106,8 @@ const createPane = () => {
 
 var points = []
 
-function initalize(width, height) {
-    createCanvas(200, 200);
+function initalize(width = 200, height = 200) {
+    createCanvas(width, height);
     points = []
     for (let i = 0; i < PARAMS.init_p; i++) {
         points[i] = createVector(random(width), random(height), random(width));
@@ -80,10 +117,11 @@ function initalize(width, height) {
 
 function setup() {
     createPane();
-    width = windowWidth - 400;
-    height = windowHeight - 50;
+    w = windowWidth - 400;
+    h = windowHeight - 50;
     pixelDensity(1);
     initalize()
+    createCanvas(w, h)
 }
 
 function draw() {
@@ -112,10 +150,13 @@ function draw() {
         }
     }
     updatePixels();
-    for (let p of points) {
-        stroke(PARAMS.p_color);
-        strokeWeight(8);
-        point(p.x, p.y)
+    if (PARAMS.show_p) {
+        for (let p of points) {
+            stroke(PARAMS.p_color);
+            strokeWeight(PARAMS.p_size);
+            point(p.x, p.y)
+        }
+
     }
     PARAMS.frameRate = floor(frameRate())
 }
