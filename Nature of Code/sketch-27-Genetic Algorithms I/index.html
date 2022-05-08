@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sketch-27</title>
+</head>
+<style>
+    /* @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap'); */
+    
+    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap');
+    html {
+        font-size: 63.5%;
+    }
+    
+    body {
+        font-family: 'Fira Code', monospace;
+        padding: 1rem;
+        overflow-x: hidden;
+        font-smooth: always;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+        background-color: black;
+        color: white;
+    }
+    
+    a {
+        text-decoration: none;
+        list-style: none;
+        color: black;
+    }
+    
+    #controls {
+        width: max-content;
+        margin: -2rem 0rem 0rem 0rem;
+    }
+    
+    .container {
+        height: 100vh;
+        position: absolute;
+        right: 6.7rem;
+        top: 0rem;
+        width: min-content;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+    }
+    
+    .details_title {
+        font-size: 3.2rem;
+        line-height: 1.2;
+    }
+    
+    .details_sketch_no {
+        margin: 0rem 0rem -1rem 0rem;
+        ;
+        font-weight: 400;
+    }
+    
+    .date {
+        font-weight: 400;
+        margin: 1.3rem 0rem 4rem 0rem;
+    }
+    
+    .github_link {
+        transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+    
+    .github_link:hover {
+        font-weight: 700;
+    }
+    
+    .bestPhrase {
+        font-size: 4rem;
+    }
+    
+    .allPhrases {
+        font-size: 1.2rem;
+    }
+    
+    .stats {
+        font-size: 1.6rem;
+    }
+    
+    .bestPhraseCont {
+        font-size: 4rem;
+        background-color: black;
+        color: white;
+        width: 70%;
+        height: auto;
+        margin: 1rem 1rem 0rem 2rem;
+    }
+    
+    .statsCont {
+        margin: 2rem 0rem 0rem 0rem;
+        font-size: 1.6rem;
+        background-color: black;
+        color: #737373;
+        width: 70%;
+        height: auto;
+        margin: 6rem 1rem 0rem 2rem;
+    }
+    
+    .allPhrasesTitle {
+        font-size: 2rem;
+        font-weight: bold;
+        position: absolute;
+        top: 2rem;
+        right: 60rem;
+    }
+    
+    .allPhrases {
+        font-size: 1.2rem;
+        position: absolute;
+        top: 7rem;
+        right: 60.8rem;
+        color: #737373;
+    }
+</style>
+
+<body>
+    <div class="container">
+        <div class="details">
+            <h3 class="details_sketch_no">Nature of Code | <span style="font-weight: 700;">No 27</span></h3>
+            <h4 class="date">May 04 2022</h4>
+            <h1 class="details_title">Genetic Algorithm I</h1>
+        </div>
+        <div id="controls">
+            <h3>Controls</h3>
+        </div>
+        <footer>
+            <h3 style="font-weight: 400; margin : 0rem 0rem 1.3rem -9.6rem">
+                Made with ❤ by
+                <a href="https://github.com/Vishvam10" class="github_link">Vishvam</a>
+            </h3>
+        </footer>
+    </div>
+</body>
+<script src="./../../tweakpane/tweakpane-3.0.8.min.js"></script>
+<script src="./../../p5/p5.min.js"></script>
+<script src="./DNA.js"></script>
+<script src="./population.js"></script>
+<script src="./sketch-27.js"></script>
+
+</html>
