@@ -1,5 +1,29 @@
 # Creative Coding
 
+## Basic setup
+
+<br>
+
+Clone the project
+```bash
+  gh repo clone Vishvam10/Creative-Sketches  
+```
+
+Go to the project directory
+```bash
+  cd "Nature of Code" 
+```
+
+<br>
+
+**Note :** 
+The code uses the minified version of the [p5](https://p5js.org/download/) and the [Tweakpane 3.0.8](https://github.com/cocopon/tweakpane/releases) library. So, make sure to include them in the proper folder. If you prefer a CDN, visit these links [p5 CDN](https://p5js.org/download/) and [Tweakpane 3.0.8 CDN](https://www.jsdelivr.com/package/npm/tweakpane) to know more. Also make sure to include all the links in the `<script>` tag in proper order ( p5 > Tweakpane > some_utils.js > sketch.js) 
+Start the Live Server or open the HTML file using a browser
+
+<br>
+
+## What It Is About ?
+
 An everyday challenge to make something creative with code. Currently learning from Nature of Code by Daniel Shiffman. 
 The Nature of Code series has the following sketches and all the sketches are parameterized using Tweakpane. 
 
