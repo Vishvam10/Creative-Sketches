@@ -92,10 +92,10 @@ class Population {
         return total / this.population.length;
     }
 
-    allPhrases() {
+    allPhrases(limit = 20) {
         let everything = "";
 
-        let displayLimit = min(this.population.length, 20);
+        let displayLimit = min(this.population.length, limit);
 
         for (let i = 0; i < displayLimit; i++) {
             everything += i + "  " +

@@ -3,16 +3,19 @@ window.addEventListener("load", (e) => {
 })
 
 const PARAMS = {
-    ref_rate: 2,
+    ref_rate: 3,
+    max_pop: 200,
+    mut_rate: 0.01,
+    limit: 20,
     frameRate: 0,
-    pause: true,
+    pause: false,
 };
 
 
-let target;
-let popmax;
-let mutationRate;
-let population;
+var target;
+var popmax;
+var mutationRate;
+var population;
 
 let bestPhrase;
 let allPhrasesTitle;
@@ -42,7 +45,38 @@ const createPane = () => {
         max: 100,
         step: 1
     })
+    folder1.addBlade({
+        view: 'text',
+        label: 'name',
+        parse: (v) => String(v),
+        value: 'To be or not to be',
+    }).on("change", (ev) => {
+        clear();
 
+        target = str(ev.value)
+        intialize()
+    })
+    folder1.addInput(PARAMS, "max_pop", {
+        min: 20,
+        max: 1000,
+        step: 1
+    }).on("change", (ev) => {
+        popmax = ev.value
+        intialize()
+    })
+    folder1.addInput(PARAMS, "mut_rate", {
+        min: 0.001,
+        max: 1,
+        step: 0.001
+    }).on("change", (ev) => {
+        mutationRate = ev.value
+        intialize()
+    })
+    folder1.addInput(PARAMS, "limit", {
+        min: 2,
+        max: 100,
+        step: 1
+    })
     folder2.addMonitor(PARAMS, "frameRate", {
         view: "graph",
         min: 1,
@@ -55,7 +89,9 @@ const createPane = () => {
 
 }
 
-
+const intialize = () => {
+    population = new Population(target, mutationRate, popmax);
+}
 
 function setup() {
     createPane()
@@ -67,25 +103,25 @@ function setup() {
     allPhrases.class("allPhrases");
 
 
-    target = "To be or not to be.";
+    target = "To be or not to be";
     popmax = 200;
     mutationRate = 0.01;
 
-    population = new Population(target, mutationRate, popmax);
+    intialize()
 }
 
-function displayInfo() {
+function displayInfo(limit) {
     // Display current status of population
     let answer = population.getBest();
 
 
     let statstext = "total generations : " + population.getGenerations() + "<br>";
-    statstext += "average fitness : " + nf(population.getAverageFitness()) + "<br>";
+    statstext += "average fitness : " + nf(round(population.getAverageFitness(), 4)) + "<br>";
     statstext += "total population : " + popmax + "<br>";
     statstext += "mutation rate : " + floor(mutationRate * 100) + "%";
 
     allPhrasesTitle.html("All phrases:<br>");
-    allPhrases.html(population.allPhrases());
+    allPhrases.html(population.allPhrases(limit));
 
     let bp = "Best phrase:<br>" + answer
     bestPhraseCont = createElement('div', bp);
@@ -123,7 +159,7 @@ function draw() {
             //println(millis()/1000.0);
             noLoop();
         }
-        displayInfo();
+        displayInfo(limit = PARAMS.limit);
 
     }
     PARAMS.frameRate = floor(frameRate())
