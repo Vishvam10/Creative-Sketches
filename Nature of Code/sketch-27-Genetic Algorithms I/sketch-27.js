@@ -115,10 +115,12 @@ function displayInfo(limit) {
     let answer = population.getBest();
 
 
-    let statstext = "total generations : " + population.getGenerations() + "<br>";
-    statstext += "average fitness : " + nf(round(population.getAverageFitness(), 4)) + "<br>";
-    statstext += "total population : " + popmax + "<br>";
-    statstext += "mutation rate : " + floor(mutationRate * 100) + "%";
+    let statstext = "Fitness Function : " + capitalizeFirstLetter(fitness_function) + "<br>";
+    statstext += "Total Generations : " + population.getGenerations() + "<br>";
+    statstext += "Average Fitness : " + nf(round(population.getAverageFitness(), 4)) + "<br>";
+    statstext += "Total Population : " + popmax + "<br>";
+    statstext += "Mutation Rate : " + floor(mutationRate * 100) + "%" + "<br>";
+    statstext += "Time Elapsed : " + round(millis() / 1000, 0) + " seconds "
 
     allPhrasesTitle.html("All phrases:<br>");
     allPhrases.html(population.allPhrases(limit));
