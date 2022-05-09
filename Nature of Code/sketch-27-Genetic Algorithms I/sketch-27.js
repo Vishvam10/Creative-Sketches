@@ -110,13 +110,13 @@ function setup() {
     intialize()
 }
 
+
 function displayInfo(limit) {
     // Display current status of population
     let answer = population.getBest();
 
 
-    let statstext = "Fitness Function : " + capitalizeFirstLetter(fitness_function) + "<br>";
-    statstext += "Total Generations : " + population.getGenerations() + "<br>";
+    let statstext = "Total Generations : " + population.getGenerations() + "<br>";
     statstext += "Average Fitness : " + nf(round(population.getAverageFitness(), 4)) + "<br>";
     statstext += "Total Population : " + popmax + "<br>";
     statstext += "Mutation Rate : " + floor(mutationRate * 100) + "%" + "<br>";
