@@ -64,6 +64,10 @@ The Nature of Code series has the following sketches and all the sketches are pa
    - [Lorenz Attractor](https://github.com/Vishvam10/Creative-Sketches/tree/master/Nature%20of%20Code/sketch-21-Chaos-Lorentz%20Attractor)
    - [Double Pendulum](https://github.com/Vishvam10/Creative-Sketches/tree/master/Nature%20of%20Code/sketch-20-Chaos-Double%20Pendulum)
 
+- Genetic Algorithms :
+   - [Part 1](https://github.com/Vishvam10/Creative-Sketches/tree/master/Nature%20of%20Code/sketch-27-Genetic%20Algorithms%20I)
+   - [Part 2](https://github.com/Vishvam10/Creative-Sketches/tree/master/Nature%20of%20Code/sketch-28-Genetic%20Algorithms%20II)
+
 - Others :
    - [Reaction Diffusion](https://github.com/Vishvam10/Creative-Sketches/tree/master/Nature%20of%20Code/sketch-24-Reaction%20Diffusion)  
    - [Maurer Rose](https://github.com/Vishvam10/Creative-Sketches/tree/master/Nature%20of%20Code/sketch-25-Maurer%20Rose)
