@@ -1,7 +1,3 @@
-window.addEventListener("load", (e) => {
-    document.getElementById("defaultCanvas0").parentNode.removeChild(document.getElementById("defaultCanvas0"))
-})
-
 const PARAMS = {
     ref_rate: 3,
     max_pop: 200,
@@ -12,22 +8,9 @@ const PARAMS = {
     pause: false,
 };
 
-
-var target;
-var fitness_function = "linear"
-var popmax;
-var mutationRate;
-var population;
-
-let bestPhrase;
-let allPhrasesTitle;
-let allPhrases;
-let stats;
-
-let bestPhraseCont;
-let statsCont;
-
-
+var foods = [];
+var poisons = []
+var vehicle;
 
 const createPane = () => {
     const controlContainer = document.getElementById("controls");
@@ -114,53 +97,25 @@ const createPane = () => {
 }
 
 const intialize = () => {
-    population = new Population(target, mutationRate, popmax);
+    vehicle = new Vehicle(width / 2, height / 2, 5, 2, 8);
+    for (let i = 0; i < 10; i++) {
+        let x = random(width);
+        let y = random(height);
+        foods.push(createVector(x, y));
+    }
+    for (let i = 0; i < 10; i++) {
+        let x = random(width);
+        let y = random(height);
+        poisons.push(createVector(x, y));
+    }
 }
 
 function setup() {
-    createPane()
-
-    allPhrasesTitle = createP("All phrases");
-    allPhrasesTitle.class("allPhrasesTitle");
-
-    allPhrases = createP()
-    allPhrases.class("allPhrases");
-
-
-    target = "To be or not to be";
-    popmax = 200;
-    mutationRate = 0.01;
-
-    intialize()
-}
-
-function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-
-function displayInfo(limit) {
-    // Display current status of population
-    let answer = population.getBest();
-
-
-    let statstext = "Fitness Function : " + capitalizeFirstLetter(fitness_function) + "<br>";
-    statstext += "Total Generations : " + population.getGenerations() + "<br>";
-    statstext += "Average Fitness : " + nf(round(population.getAverageFitness(), 4)) + "<br>";
-    statstext += "Total Population : " + popmax + "<br>";
-    statstext += "Mutation Rate : " + floor(mutationRate * 100) + "%" + "<br>";
-    statstext += "Time Elapsed : " + round(millis() / 1000, 0) + " seconds "
-
-    allPhrasesTitle.html("All phrases:<br>");
-    allPhrases.html(population.allPhrases(limit));
-
-    let bp = "Best phrase:<br>" + answer
-    bestPhraseCont = createElement('div', bp);
-    bestPhraseCont.class('bestPhraseCont');
-
-    statsCont = createElement('div', statstext);
-    statsCont.class('statsCont');
-
+    width = windowWidth - 400;
+    height = windowHeight - 50;
+    createCanvas(width, height);
+    createPane();
+    intialize();
 }
 
 function draw() {
@@ -168,29 +123,19 @@ function draw() {
         return
     }
     background(44)
-    if (frameCount % PARAMS.ref_rate == 0) {
-        if (bestPhraseCont) {
-            bestPhraseCont.remove()
-        }
-        if (statsCont) {
-            statsCont.remove()
-        }
-
-        // 1. Create next generation
-        population.generate();
-
-        // 2. Calculate fitness
-        population.calcFitness(fitness_function);
-
-        population.evaluate();
-
-        // If we found the target phrase, stop
-        if (population.isFinished()) {
-            noLoop();
-        }
-        displayInfo(limit = PARAMS.limit);
-
+    for (f of foods) {
+        noStroke();
+        fill(0, 255, 0);
+        circle(f.x, f.y, 8);
     }
-    PARAMS.avg_fitness = round(population.getAverageFitness(), 4)
+    for (p of poisons) {
+        noStroke();
+        fill(255, 0, 255);
+        circle(p.x, p.y, 8);
+    }
+    vehicle.eat(foods);
+    vehicle.eat(poisons);
+    vehicle.update();
+    vehicle.show();
     PARAMS.frameRate = floor(frameRate())
 }
