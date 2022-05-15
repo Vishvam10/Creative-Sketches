@@ -97,7 +97,7 @@ const createPane = () => {
 }
 
 const intialize = () => {
-    vehicle = new Vehicle(width / 2, height / 2, 5, 2, 8);
+    vehicle = new Vehicle(width / 2, height / 2, 2, 2, 8);
     for (let i = 0; i < 10; i++) {
         let x = random(width);
         let y = random(height);

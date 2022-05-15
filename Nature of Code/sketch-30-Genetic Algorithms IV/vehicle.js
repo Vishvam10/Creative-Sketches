@@ -40,16 +40,13 @@ class Vehicle {
     }
 
     seek(target, arrive = true) {
-        let desired = p5.Vector.sub(target, this.pos);
-        let mag = this.maxSpeed;
-        if (arrive) {
-            if (desired.mag() < 100) {
-                mag = map(desired.mag(), 0, 200, 0, this.maxSpeed);
-            }
-        }
-        desired.setMag(mag);
-        let steering = p5.Vector.sub(desired, this.vel);
-        this.applyForce(steering);
+        var desired = p5.Vector.sub(target, this.position);
+        desired.setMag(this.maxspeed);
+
+        var steer = p5.Vector.sub(desired, this.velocity);
+        steer.limit(this.maxforce);
+
+        this.applyForce(steer)
     }
 
     applyForce(force) {
