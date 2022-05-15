@@ -97,7 +97,7 @@ const createPane = () => {
 }
 
 const intialize = () => {
-    vehicle = new Vehicle(width / 2, height / 2, 2, 2, 8);
+    vehicle = new Vehicle(width / 2, height / 2, 4, 10, 8);
     for (let i = 0; i < 10; i++) {
         let x = random(width);
         let y = random(height);
@@ -137,5 +137,6 @@ function draw() {
     vehicle.eat(poisons);
     vehicle.update();
     vehicle.show();
+
     PARAMS.frameRate = floor(frameRate())
 }

@@ -39,14 +39,14 @@ class Vehicle {
         return this.seek(target).mult(-1);
     }
 
-    seek(target, arrive = true) {
-        var desired = p5.Vector.sub(target, this.position);
+    seek(target) {
+        var desired = p5.Vector.sub(target, this.pos);
         desired.setMag(this.maxspeed);
 
-        var steer = p5.Vector.sub(desired, this.velocity);
+        var steer = p5.Vector.sub(desired, this.vel);
         steer.limit(this.maxforce);
 
-        this.applyForce(steer)
+        this.applyForce(steer);
     }
 
     applyForce(force) {
@@ -57,7 +57,7 @@ class Vehicle {
         this.vel.add(this.acc);
         this.vel.limit(this.maxSpeed);
         this.pos.add(this.vel);
-        this.acc.set(0, 0);
+        this.acc.mult(0);
     }
 
     show() {
@@ -77,7 +77,7 @@ class Vehicle {
 
     eat(arr) {
         let minDist = Infinity;
-        let closestIndex = -1
+        let closestIndex = -1;
         for (let i = 0; i < arr.length; i++) {
             let d = this.pos.dist(arr[i]);
             if (d < minDist) {
@@ -85,11 +85,14 @@ class Vehicle {
                 closestIndex = i;
             }
         }
-
+        // Eat and delete OR seek it
         if (minDist < 10) {
             arr.splice(closestIndex, 1)
+        } else {
+            this.seek(arr[closestIndex])
+
         }
-        this.seek(arr[closestIndex]);
+
 
     }
 
