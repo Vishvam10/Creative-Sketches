@@ -67,6 +67,8 @@ The Nature of Code series has the following sketches and all the sketches are pa
 - Genetic Algorithms :
    - [Part 1](https://github.com/Vishvam10/Creative-Sketches/tree/master/Nature%20of%20Code/sketch-27-Genetic%20Algorithms%20I)
    - [Part 2](https://github.com/Vishvam10/Creative-Sketches/tree/master/Nature%20of%20Code/sketch-28-Genetic%20Algorithms%20II)
+   - [Part 3](https://github.com/Vishvam10/Creative-Sketches/tree/master/Nature%20of%20Code/sketch-29-Genetic%20Algorithms%20III)
+   - [Evolutionary Steering](https://github.com/Vishvam10/Creative-Sketches/tree/master/Nature%20of%20Code/sketch-30-Genetic%20Algorithms%20IV)
 
 - Others :
    - [Reaction Diffusion](https://github.com/Vishvam10/Creative-Sketches/tree/master/Nature%20of%20Code/sketch-24-Reaction%20Diffusion)  
