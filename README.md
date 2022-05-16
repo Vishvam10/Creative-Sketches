@@ -14,6 +14,8 @@ Go to the project directory
   cd "Nature of Code" 
 ```
 
+Then, start the live server
+
 <br>
 
 **Note :** 
