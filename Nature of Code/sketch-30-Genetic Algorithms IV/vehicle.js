@@ -107,7 +107,7 @@ class Vehicle {
 
     behaviours(good, bad) {
         let steerG = this.eat(good, 0.1);
-        let steerB = this.eat(bad, -0.5);
+        let steerB = this.eat(bad, -0.2);
 
         steerG.mult(this.dna[0])
         steerB.mult(this.dna[1])
@@ -120,7 +120,7 @@ class Vehicle {
     eat(arr, nutrition) {
         let minDist = Infinity;
         let closestIndex = -1;
-        for (let i = 0; i < arr.length; i++) {
+        for (let i = arr.length - 1; i >= 0; i--) {
             let d = this.pos.dist(arr[i]);
             if (d < minDist) {
                 minDist = d;
@@ -129,7 +129,7 @@ class Vehicle {
         }
 
         // Eat and delete OR seek it
-        if (minDist < 5) {
+        if (minDist < 10) {
             arr.splice(closestIndex, 1);
             this.health += nutrition;
         } else if (closestIndex > -1) {

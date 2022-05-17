@@ -144,7 +144,7 @@ function draw() {
         fill(255, 0, 255);
         circle(p.x, p.y, 8);
     }
-    for (let i = vehicles.length - 1; i > 0; i--) {
+    for (let i = vehicles.length - 1; i >= 0; i--) {
         vehicle = vehicles[i]
         vehicle.behaviours(foods, poisons);
         vehicle.wrap();
