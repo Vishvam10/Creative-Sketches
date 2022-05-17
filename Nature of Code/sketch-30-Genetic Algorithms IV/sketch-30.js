@@ -10,6 +10,7 @@ const PARAMS = {
 
 var foods = [];
 var poisons = []
+var vehicles = []
 var vehicle;
 
 const createPane = () => {
@@ -97,7 +98,12 @@ const createPane = () => {
 }
 
 const intialize = () => {
-    vehicle = new Vehicle(width / 2, height / 2, 4, 10, 8);
+    for (let i = 0; i < 10; i++) {
+        let x = random(width);
+        let y = random(height);
+        vehicle = new Vehicle(x, y, random(0, 10), random(0, 10), 8);
+        vehicles.push(vehicle);
+    }
     for (let i = 0; i < 10; i++) {
         let x = random(width);
         let y = random(height);
@@ -123,6 +129,11 @@ function draw() {
         return
     }
     background(44)
+    if (random(1) < 0.01) {
+        let x = random(width);
+        let y = random(height);
+        foods.push(createVector(x, y));
+    }
     for (f of foods) {
         noStroke();
         fill(0, 255, 0);
@@ -133,10 +144,16 @@ function draw() {
         fill(255, 0, 255);
         circle(p.x, p.y, 8);
     }
-    vehicle.eat(foods);
-    vehicle.eat(poisons);
-    vehicle.update();
-    vehicle.show();
+    for (let i = vehicles.length - 1; i > 0; i--) {
+        vehicle = vehicles[i]
+        vehicle.behaviours(foods, poisons);
+        vehicle.wrap();
+        vehicle.update();
+        vehicle.show();
+        if (vehicle.dead()) {
+            vehicles.splice(i, 1)
+        }
+    }
 
     PARAMS.frameRate = floor(frameRate())
 }
