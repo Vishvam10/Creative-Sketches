@@ -1,16 +1,30 @@
+var mutationRate = 0.1
+
 class Vehicle {
-    constructor(x, y, max_speed, max_force, size, color = "#ffffff") {
+    constructor(x, y, max_speed, max_force, size, color = "#ffffff", dna = [1, 1, random(1, 100), random(1, 100)]) {
         this.pos = createVector(x, y);
         this.vel = createVector(0, 0);
         this.acc = createVector(0, 0);
         this.maxSpeed = max_speed;
         this.maxForce = max_force;
-        this.dna = []
-        this.dna[0] = random(-2, 2); // Food Weight
-        this.dna[1] = random(-2, 2); // Poision Weight
-        this.dna[2] = random(5, 100); // Food Perception : like a radius
-        this.dna[3] = random(5, 100); // Poision Perception : like a radius
+        this.dna = dna
+
+        // for (let i = 0; i < dna.length; i++) {
+        //     if (random(1) < mutationRate) {
+        //         if (i > 1) {
+        //             this.dna[i] += random(-10, 10)
+        //         } else {
+        //             this.dna[i] += random(-0.1, 0.1)
+        //         }
+        //     }
+        // }
+        // this.dna[0] = random(-2, 2); // Food Weight
+        // this.dna[1] = random(-2, 2); // Poision Weight
+        // this.dna[2] = random(1, 100); // Food Perception : like a radius
+        // this.dna[3] = random(1, 100); // Poision Perception : like a radius
         this.health = 1;
+
+        this.pastVel = []
         this.size = size;
         this.color = color;
     }
@@ -134,25 +148,36 @@ class Vehicle {
 
     eat(arr, nutrition, perception) {
         let minDist = Infinity;
-        let closestIndex = -1;
+        let closest = null;
         for (let i = arr.length - 1; i >= 0; i--) {
             let d = this.pos.dist(arr[i]);
-            if (d < minDist && d < perception) {
-                minDist = d;
-                closestIndex = i;
+
+            // EAT and DELETER OR SEEK it
+            if (d < this.maxSpeed) {
+                arr.splice(i, 1);
+                this.health += nutrition;
+            } else {
+                // Can not EAT and be ATTRACTED to it at the same time
+                if (d < minDist && d < perception) {
+                    minDist = d;
+                    closest = arr[i];
+                }
+
             }
         }
 
-        // Eat and delete OR seek it
-        if (minDist < 10) {
-            arr.splice(closestIndex, 1);
-            this.health += nutrition;
-        } else if (closestIndex > -1) {
-            return this.seek(arr[closestIndex])
+        if (closest != null) {
+            return this.seek(closest)
         }
 
         return createVector(0, 0);
 
+    }
+
+    clone() {
+        if (random(1) < 0.001) {
+            return new Vehicle(this.pos.x, this.pos.y, this.maxSpeed, this.maxForce, this.dna)
+        }
     }
 
     boundaries() {

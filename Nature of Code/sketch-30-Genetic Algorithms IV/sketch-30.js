@@ -98,7 +98,7 @@ const createPane = () => {
 }
 
 const intialize = () => {
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 2; i++) {
         let x = random(width);
         let y = random(height);
         vehicle = new Vehicle(x, y, random(0, 10), random(0, 10), 4);
@@ -129,34 +129,46 @@ function draw() {
         return
     }
     background(44)
-    if (random(1) < 0.2) {
-        let x = random(width);
-        let y = random(height);
+    if (random(1) < 0.1) {
+        var x = random(width);
+        var y = random(height);
         foods.push(createVector(x, y));
     }
-    if (random(1) < 0.1) {
-        let x = random(width);
-        let y = random(height);
+
+    if (random(1) < 0.01) {
+        var x = random(width);
+        var y = random(height);
         poisons.push(createVector(x, y));
     }
-    for (f of foods) {
-        noStroke();
+
+    for (var i = 0; i < foods.length; i++) {
         fill(0, 255, 0);
-        circle(f.x, f.y, 8);
-    }
-    for (p of poisons) {
         noStroke();
-        fill(255, 0, 255);
-        circle(p.x, p.y, 8);
+        ellipse(foods[i].x, foods[i].y, 4, 4);
     }
-    for (let i = vehicles.length - 1; i >= 0; i--) {
-        vehicle = vehicles[i]
-        vehicle.boundaries();
-        vehicle.behaviours(foods, poisons);
-        vehicle.update();
-        vehicle.show();
-        if (vehicle.dead()) {
-            vehicles.splice(i, 1)
+
+    for (var i = 0; i < poisons.length; i++) {
+        fill(255, 0, 0);
+        noStroke();
+        ellipse(poisons[i].x, poisons[i].y, 4, 4);
+    }
+
+    for (var i = vehicles.length - 1; i >= 0; i--) {
+        vehicles[i].boundaries();
+        vehicles[i].behaviours(foods, poisons);
+        vehicles[i].update();
+        vehicles[i].show();
+
+        var newVehicle = vehicles[i].clone();
+        if (newVehicle != null) {
+            vehicles.push(newVehicle);
+        }
+
+        if (vehicles[i].dead()) {
+            var x = vehicles[i].position.x;
+            var y = vehicles[i].position.y;
+            foods.push(createVector(x, y));
+            vehicles.splice(i, 1);
         }
     }
 
