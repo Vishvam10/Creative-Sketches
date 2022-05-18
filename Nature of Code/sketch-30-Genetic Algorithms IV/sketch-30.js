@@ -101,7 +101,7 @@ const intialize = () => {
     for (let i = 0; i < 10; i++) {
         let x = random(width);
         let y = random(height);
-        vehicle = new Vehicle(x, y, random(0, 10), random(0, 10), 8);
+        vehicle = new Vehicle(x, y, random(0, 10), random(0, 10), 4);
         vehicles.push(vehicle);
     }
     for (let i = 0; i < 10; i++) {
@@ -129,10 +129,15 @@ function draw() {
         return
     }
     background(44)
-    if (random(1) < 0.01) {
+    if (random(1) < 0.2) {
         let x = random(width);
         let y = random(height);
         foods.push(createVector(x, y));
+    }
+    if (random(1) < 0.1) {
+        let x = random(width);
+        let y = random(height);
+        poisons.push(createVector(x, y));
     }
     for (f of foods) {
         noStroke();
@@ -146,8 +151,8 @@ function draw() {
     }
     for (let i = vehicles.length - 1; i >= 0; i--) {
         vehicle = vehicles[i]
+        vehicle.boundaries();
         vehicle.behaviours(foods, poisons);
-        vehicle.wrap();
         vehicle.update();
         vehicle.show();
         if (vehicle.dead()) {

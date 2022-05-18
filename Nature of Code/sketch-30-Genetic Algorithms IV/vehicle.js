@@ -6,8 +6,10 @@ class Vehicle {
         this.maxSpeed = max_speed;
         this.maxForce = max_force;
         this.dna = []
-        this.dna[0] = random(-5, 5);
-        this.dna[1] = random(-5, 5);
+        this.dna[0] = random(-2, 2); // Food Weight
+        this.dna[1] = random(-2, 2); // Poision Weight
+        this.dna[2] = random(5, 100); // Food Perception : like a radius
+        this.dna[3] = random(5, 100); // Poision Perception : like a radius
         this.health = 1;
         this.size = size;
         this.color = color;
@@ -58,6 +60,7 @@ class Vehicle {
     }
 
     update() {
+        this.health -= 0.0001;
         this.vel.add(this.acc);
         this.vel.limit(this.maxSpeed);
         this.pos.add(this.vel);
@@ -75,12 +78,24 @@ class Vehicle {
         strokeWeight(3);
         stroke(0, 255, 0);
         noFill();
-        line(0, 0, 0, -this.dna[0] * 10);
-        strokeWeight(2);
+        line(0, 0, 0, -this.dna[0] * 20);
+
+        noFill();
+        strokeWeight(0.5);
         ellipse(0, 0, this.dna[2] * 2);
+
+        strokeWeight(2);
+        strokeWeight(0.5);
+        ellipse(0, 0, this.dna[2] * 2);
+
         stroke(255, 0, 0);
-        line(0, 0, 0, -this.dna[1] * 10);
+        noFill();
         ellipse(0, 0, this.dna[3] * 2);
+
+        strokeWeight(3);
+        stroke(0, 255, 0);
+        noFill();
+        line(0, 0, 0, -this.dna[1] * 20);
 
         fill(255);
         noStroke();
@@ -88,7 +103,7 @@ class Vehicle {
         let green = color(0, 255, 0);
         let red = color(255, 0, 0);
         let col = lerpColor(red, green, this.health);
-
+        // let col = color(255, 255, 255)
         fill(col);
         stroke(col)
 
@@ -106,8 +121,8 @@ class Vehicle {
     }
 
     behaviours(good, bad) {
-        let steerG = this.eat(good, 0.1);
-        let steerB = this.eat(bad, -0.2);
+        let steerG = this.eat(good, 0.1, this.dna[2]);
+        let steerB = this.eat(bad, -0.2, this.dna[3]);
 
         steerG.mult(this.dna[0])
         steerB.mult(this.dna[1])
@@ -117,12 +132,12 @@ class Vehicle {
 
     }
 
-    eat(arr, nutrition) {
+    eat(arr, nutrition, perception) {
         let minDist = Infinity;
         let closestIndex = -1;
         for (let i = arr.length - 1; i >= 0; i--) {
             let d = this.pos.dist(arr[i]);
-            if (d < minDist) {
+            if (d < minDist && d < perception) {
                 minDist = d;
                 closestIndex = i;
             }
@@ -138,6 +153,31 @@ class Vehicle {
 
         return createVector(0, 0);
 
+    }
+
+    boundaries() {
+        let d = 25;
+        let desired = null;
+
+        if (this.pos.x < d) {
+            desired = createVector(this.maxSpeed, this.vel.y);
+        } else if (this.pos.x > width - d) {
+            desired = createVector(-this.maxSpeed, this.vel.y);
+        }
+
+        if (this.pos.y < d) {
+            desired = createVector(this.vel.x, this.maxSpeed);
+        } else if (this.pos.y > height - d) {
+            desired = createVector(this.vel.x, -this.maxSpeed);
+        }
+
+        if (desired !== null) {
+            desired.normalize();
+            desired.mult(this.maxSpeed);
+            var steer = p5.Vector.sub(desired, this.vel);
+            steer.limit(this.maxforce);
+            this.applyForce(steer);
+        }
     }
 
     bounce() {
