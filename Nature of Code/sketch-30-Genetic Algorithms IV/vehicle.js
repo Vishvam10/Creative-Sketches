@@ -1,10 +1,10 @@
 class Vehicle {
-    constructor(x, y, max_speed, max_force, size, color = "#ffffff", dna = [1, 1, random(1, 100), random(1, 100)], mutationRate = 0.1) {
+    constructor(x, y, color = "#ffffff", dna = [1, 1, random(1, 100), random(1, 100)], mutationRate = 0.1) {
         this.pos = createVector(x, y);
         this.vel = createVector(0, 0);
         this.acc = createVector(0, 0);
-        this.maxSpeed = max_speed;
-        this.maxForce = max_force;
+        this.maxSpeed = random(0, 10);
+        this.maxForce = random(0, 10);
         this.mutationRate = mutationRate;
         this.dna = dna
 
@@ -23,8 +23,7 @@ class Vehicle {
         // this.dna[3] = random(1, 100); // Poision Perception : like a radius
         this.health = 1;
 
-        this.pastVel = []
-        this.size = size;
+        this.size = 4;
         this.color = color;
     }
 
@@ -64,7 +63,6 @@ class Vehicle {
 
         var steer = p5.Vector.sub(desired, this.vel);
         steer.limit(this.maxforce);
-
         return steer;
     }
 
@@ -77,7 +75,7 @@ class Vehicle {
         this.vel.add(this.acc);
         this.vel.limit(this.maxSpeed);
         this.pos.add(this.vel);
-        this.acc.set(0, 0);
+        this.acc.mult(0);
     }
 
     show(show_perc) {
@@ -168,7 +166,7 @@ class Vehicle {
         }
 
         if (closest != null) {
-            return this.seek(closest)
+            return this.seek(closest);
         }
 
         return createVector(0, 0);
@@ -177,7 +175,9 @@ class Vehicle {
 
     clone(repr_rate = 0.001) {
         if (random(1) < repr_rate) {
-            return new Vehicle(this.pos.x, this.pos.y, this.maxSpeed, this.maxForce, this.dna, this.mutationRate)
+            let n = new Vehicle(this.pos.x, this.pos.y, this.size, "#ffffff", this.dna, mutationRate = this.mutationRate);
+            return n;
+
         }
     }
 

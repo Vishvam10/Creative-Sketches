@@ -3,11 +3,11 @@ const PARAMS = {
     n_food: 10,
     n_poison: 10,
     mut_rate: 0.1,
-    repr_rate: 10,
+    repr_rate: 2,
     food_freq: 0.01,
     pois_freq: 0.01,
     avg_fitness: 0,
-    show_perc: false,
+    show_perc: true,
     limit: 20,
     frameRate: 0,
     pause: false,
@@ -104,7 +104,7 @@ const intialize = (nv = 2, nf = 10, np = 10) => {
     for (let i = 0; i < nv; i++) {
         let x = random(width);
         let y = random(height);
-        vehicle = new Vehicle(x, y, random(0, 10), random(0, 10), 4, mutationRate = PARAMS.mut_rate);
+        vehicle = new Vehicle(x, y, mutationRate = PARAMS.mut_rate);
         vehicles.push(vehicle);
     }
     for (let i = 0; i < nf; i++) {
@@ -168,8 +168,8 @@ function draw() {
         }
 
         if (vehicles[i].dead()) {
-            var x = vehicles[i].position.x;
-            var y = vehicles[i].position.y;
+            var x = vehicles[i].pos.x;
+            var y = vehicles[i].pos.y;
             foods.push(createVector(x, y));
             vehicles.splice(i, 1);
         }
