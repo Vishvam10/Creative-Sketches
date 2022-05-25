@@ -1,512 +1,512 @@
 Environment
 
-    describe()
-    describeElement()
-    textOutput()
-    gridOutput()
-    print()
-    frameCount
-    deltaTime
-    focused
-    cursor()
-    frameRate()
-    noCursor()
-    displayWidth
-    displayHeight
-    windowWidth
-    windowHeight
-    windowResized()
-    width
-    height
-    fullscreen()
-    pixelDensity()
-    displayDensity()
-    getURL()
-    getURLPath()
-    getURLParams()
+describe()
+describeElement()
+textOutput()
+gridOutput()
+print()
+frameCount
+deltaTime
+focused
+cursor()
+frameRate()
+noCursor()
+displayWidth
+displayHeight
+windowWidth
+windowHeight
+windowResized()
+width
+height
+fullscreen()
+pixelDensity()
+displayDensity()
+getURL()
+getURLPath()
+getURLParams()
 
 Color
 Creating & Reading
 
-    alpha()
-    blue()
-    brightness()
-    color()
-    green()
-    hue()
-    lerpColor()
-    lightness()
-    red()
-    saturation()
-    p5.Color
+alpha()
+blue()
+brightness()
+color()
+green()
+hue()
+lerpColor()
+lightness()
+red()
+saturation()
+p5.Color
 
 Setting
 
-    background()
-    clear()
-    colorMode()
-    fill()
-    noFill()
-    noStroke()
-    stroke()
-    erase()
-    noErase()
+background()
+clear()
+colorMode()
+fill()
+noFill()
+noStroke()
+stroke()
+erase()
+noErase()
 
 Shape
 2D Primitives
 
-    arc()
-    ellipse()
-    circle()
-    line()
-    point()
-    quad()
-    rect()
-    square()
-    triangle()
+arc()
+ellipse()
+circle()
+line()
+point()
+quad()
+rect()
+square()
+triangle()
 
 Attributes
 
-    ellipseMode()
-    noSmooth()
-    rectMode()
-    smooth()
-    strokeCap()
-    strokeJoin()
-    strokeWeight()
+ellipseMode()
+noSmooth()
+rectMode()
+smooth()
+strokeCap()
+strokeJoin()
+strokeWeight()
 
 Curves
 
-    bezier()
-    bezierDetail()
-    bezierPoint()
-    bezierTangent()
-    curve()
-    curveDetail()
-    curveTightness()
-    curvePoint()
-    curveTangent()
+bezier()
+bezierDetail()
+bezierPoint()
+bezierTangent()
+curve()
+curveDetail()
+curveTightness()
+curvePoint()
+curveTangent()
 
 Vertex
 
-    beginContour()
-    beginShape()
-    bezierVertex()
-    curveVertex()
-    endContour()
-    endShape()
-    quadraticVertex()
-    vertex()
-    normal()
+beginContour()
+beginShape()
+bezierVertex()
+curveVertex()
+endContour()
+endShape()
+quadraticVertex()
+vertex()
+normal()
 
 3D Primitives
 
-    plane()
-    box()
-    sphere()
-    cylinder()
-    cone()
-    ellipsoid()
-    torus()
-    p5.Geometry
+plane()
+box()
+sphere()
+cylinder()
+cone()
+ellipsoid()
+torus()
+p5.Geometry
 
 3D Models
 
-    loadModel()
-    model()
+loadModel()
+model()
 
 Constants
 
-    HALF_PI
-    PI
-    QUARTER_PI
-    TAU
-    TWO_PI
-    DEGREES
-    RADIANS
+HALF_PI
+PI
+QUARTER_PI
+TAU
+TWO_PI
+DEGREES
+RADIANS
 
 Structure
 
-    preload()
-    setup()
-    draw()
-    remove()
-    disableFriendlyErrors
-    noLoop()
-    loop()
-    isLooping()
-    push()
-    pop()
-    redraw()
-    p5()
+preload()
+setup()
+draw()
+remove()
+disableFriendlyErrors
+noLoop()
+loop()
+isLooping()
+push()
+pop()
+redraw()
+p5()
 
 DOM
 
-    p5.Element
-    select()
-    selectAll()
-    removeElements()
-    changed()
-    input()
-    createDiv()
-    createP()
-    createSpan()
-    createImg()
-    createA()
-    createSlider()
-    createButton()
-    createCheckbox()
-    createSelect()
-    createRadio()
-    createColorPicker()
-    createInput()
-    createFileInput()
-    createVideo()
-    createAudio()
-    VIDEO
-    AUDIO
-    createCapture()
-    createElement()
-    p5.MediaElement
-    p5.File
+p5.Element
+select()
+selectAll()
+removeElements()
+changed()
+input()
+createDiv()
+createP()
+createSpan()
+createImg()
+createA()
+createSlider()
+createButton()
+createCheckbox()
+createSelect()
+createRadio()
+createColorPicker()
+createInput()
+createFileInput()
+createVideo()
+createAudio()
+VIDEO
+AUDIO
+createCapture()
+createElement()
+p5.MediaElement
+p5.File
 
 Rendering
 
-    p5.Graphics
-    createCanvas()
-    resizeCanvas()
-    noCanvas()
-    createGraphics()
-    blendMode()
-    drawingContext
-    setAttributes()
+p5.Graphics
+createCanvas()
+resizeCanvas()
+noCanvas()
+createGraphics()
+blendMode()
+drawingContext
+setAttributes()
 
 Foundation
 
-    let
-    const
-    ===
-    >
-    >=
-    <
-    <=
-    if-else
-    function
-    return
-    boolean
-    string
-    number
-    object
-    class
-    for
-    while
-    JSON
-    console
+let
+const
+===
+>
+>=
+<
+<=
+if-else
+function
+return
+boolean
+string
+number
+object
+class
+for
+while
+JSON
+console
 
 Transform
 
-    applyMatrix()
-    resetMatrix()
-    rotate()
-    rotateX()
-    rotateY()
-    rotateZ()
-    scale()
-    shearX()
-    shearY()
-    translate()
+applyMatrix()
+resetMatrix()
+rotate()
+rotateX()
+rotateY()
+rotateZ()
+scale()
+shearX()
+shearY()
+translate()
 
 Data
 LocalStorage
 
-    storeItem()
-    getItem()
-    clearStorage()
-    removeItem()
+storeItem()
+getItem()
+clearStorage()
+removeItem()
 
 Dictionary
 
-    createStringDict()
-    createNumberDict()
-    p5.TypedDict
-    p5.NumberDict
+createStringDict()
+createNumberDict()
+p5.TypedDict
+p5.NumberDict
 
 Array Functions
 
-    append()
-    arrayCopy()
-    concat()
-    reverse()
-    shorten()
-    shuffle()
-    sort()
-    splice()
-    subset()
+append()
+arrayCopy()
+concat()
+reverse()
+shorten()
+shuffle()
+sort()
+splice()
+subset()
 
 Conversion
 
-    float()
-    int()
-    str()
-    boolean()
-    byte()
-    char()
-    unchar()
-    hex()
-    unhex()
+float()
+int()
+str()
+boolean()
+byte()
+char()
+unchar()
+hex()
+unhex()
 
 String Functions
 
-    join()
-    match()
-    matchAll()
-    nf()
-    nfc()
-    nfp()
-    nfs()
-    split()
-    splitTokens()
-    trim()
+join()
+match()
+matchAll()
+nf()
+nfc()
+nfp()
+nfs()
+split()
+splitTokens()
+trim()
 
 Events
 Acceleration
 
-    deviceOrientation
-    accelerationX
-    accelerationY
-    accelerationZ
-    pAccelerationX
-    pAccelerationY
-    pAccelerationZ
-    rotationX
-    rotationY
-    rotationZ
-    pRotationX
-    pRotationY
-    pRotationZ
-    turnAxis
-    setMoveThreshold()
-    setShakeThreshold()
-    deviceMoved()
-    deviceTurned()
-    deviceShaken()
+deviceOrientation
+accelerationX
+accelerationY
+accelerationZ
+pAccelerationX
+pAccelerationY
+pAccelerationZ
+rotationX
+rotationY
+rotationZ
+pRotationX
+pRotationY
+pRotationZ
+turnAxis
+setMoveThreshold()
+setShakeThreshold()
+deviceMoved()
+deviceTurned()
+deviceShaken()
 
 Keyboard
 
-    keyIsPressed
-    key
-    keyCode
-    keyPressed()
-    keyReleased()
-    keyTyped()
-    keyIsDown()
+keyIsPressed
+key
+keyCode
+keyPressed()
+keyReleased()
+keyTyped()
+keyIsDown()
 
 Mouse
 
-    movedX
-    movedY
-    mouseX
-    mouseY
-    pmouseX
-    pmouseY
-    winMouseX
-    winMouseY
-    pwinMouseX
-    pwinMouseY
-    mouseButton
-    mouseIsPressed
-    mouseMoved()
-    mouseDragged()
-    mousePressed()
-    mouseReleased()
-    mouseClicked()
-    doubleClicked()
-    mouseWheel()
-    requestPointerLock()
-    exitPointerLock()
+movedX
+movedY
+mouseX
+mouseY
+pmouseX
+pmouseY
+winMouseX
+winMouseY
+pwinMouseX
+pwinMouseY
+mouseButton
+mouseIsPressed
+mouseMoved()
+mouseDragged()
+mousePressed()
+mouseReleased()
+mouseClicked()
+doubleClicked()
+mouseWheel()
+requestPointerLock()
+exitPointerLock()
 
 Touch
 
-    touches
-    touchStarted()
-    touchMoved()
-    touchEnded()
+touches
+touchStarted()
+touchMoved()
+touchEnded()
 
 Image
 
-    createImage()
-    saveCanvas()
-    saveFrames()
-    p5.Image
+createImage()
+saveCanvas()
+saveFrames()
+p5.Image
 
 Loading & Displaying
 
-    loadImage()
-    image()
-    tint()
-    noTint()
-    imageMode()
+loadImage()
+image()
+tint()
+noTint()
+imageMode()
 
 Pixels
 
-    pixels
-    blend()
-    copy()
-    filter()
-    get()
-    loadPixels()
-    set()
-    updatePixels()
+pixels
+blend()
+copy()
+filter()
+get()
+loadPixels()
+set()
+updatePixels()
 
 IO
 Input
 
-    loadJSON()
-    loadStrings()
-    loadTable()
-    loadXML()
-    loadBytes()
-    httpGet()
-    httpPost()
-    httpDo()
-    p5.XML
+loadJSON()
+loadStrings()
+loadTable()
+loadXML()
+loadBytes()
+httpGet()
+httpPost()
+httpDo()
+p5.XML
 
 Output
 
-    createWriter()
-    p5.PrintWriter
-    save()
-    saveJSON()
-    saveStrings()
-    saveTable()
+createWriter()
+p5.PrintWriter
+save()
+saveJSON()
+saveStrings()
+saveTable()
 
 Table
 
-    p5.Table
-    p5.TableRow
+p5.Table
+p5.TableRow
 
 Time & Date
 
-    day()
-    hour()
-    minute()
-    millis()
-    month()
-    second()
-    year()
+day()
+hour()
+minute()
+millis()
+month()
+second()
+year()
 
 Math
 Calculation
 
-    abs()
-    ceil()
-    constrain()
-    dist()
-    exp()
-    floor()
-    lerp()
-    log()
-    mag()
-    map()
-    max()
-    min()
-    norm()
-    pow()
-    round()
-    sq()
-    sqrt()
-    fract()
+abs()
+ceil()
+constrain()
+dist()
+exp()
+floor()
+lerp()
+log()
+mag()
+map()
+max()
+min()
+norm()
+pow()
+round()
+sq()
+sqrt()
+fract()
 
 Vector
 
-    createVector()
-    p5.Vector
+createVector()
+p5.Vector
 
 Noise
 
-    noise()
-    noiseDetail()
-    noiseSeed()
+noise()
+noiseDetail()
+noiseSeed()
 
 Random
 
-    randomSeed()
-    random()
-    randomGaussian()
+randomSeed()
+random()
+randomGaussian()
 
 Trigonometry
 
-    acos()
-    asin()
-    atan()
-    atan2()
-    cos()
-    sin()
-    tan()
-    degrees()
-    radians()
-    angleMode()
+acos()
+asin()
+atan()
+atan2()
+cos()
+sin()
+tan()
+degrees()
+radians()
+angleMode()
 
 Typography
 Attributes
 
-    textAlign()
-    textLeading()
-    textSize()
-    textStyle()
-    textWidth()
-    textAscent()
-    textDescent()
-    textWrap()
+textAlign()
+textLeading()
+textSize()
+textStyle()
+textWidth()
+textAscent()
+textDescent()
+textWrap()
 
 Loading & Displaying
 
-    loadFont()
-    text()
-    textFont()
-    p5.Font
+loadFont()
+text()
+textFont()
+p5.Font
 
 3D
 Interaction
 
-    orbitControl()
-    debugMode()
-    noDebugMode()
+orbitControl()
+debugMode()
+noDebugMode()
 
 Lights
 
-    ambientLight()
-    specularColor()
-    directionalLight()
-    pointLight()
-    lights()
-    lightFalloff()
-    spotLight()
-    noLights()
+ambientLight()
+specularColor()
+directionalLight()
+pointLight()
+lights()
+lightFalloff()
+spotLight()
+noLights()
 
 Material
 
-    loadShader()
-    createShader()
-    shader()
-    resetShader()
-    texture()
-    textureMode()
-    textureWrap()
-    normalMaterial()
-    ambientMaterial()
-    emissiveMaterial()
-    specularMaterial()
-    shininess()
-    p5.Shader
+loadShader()
+createShader()
+shader()
+resetShader()
+texture()
+textureMode()
+textureWrap()
+normalMaterial()
+ambientMaterial()
+emissiveMaterial()
+specularMaterial()
+shininess()
+p5.Shader
 
 Camera
 
-    camera()
-    perspective()
-    ortho()
-    frustum()
-    createCamera()
-    p5.Camera
-    setCamera()
+camera()
+perspective()
+ortho()
+frustum()
+createCamera()
+p5.Camera
+setCamera()
 

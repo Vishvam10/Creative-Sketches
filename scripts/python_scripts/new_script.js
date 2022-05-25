@@ -1,4 +1,5 @@
-var s = function(p) {
+var sketch = function(p) {
+
  let t = 0; // time variable
 
 p.setup() = function() {
@@ -32,4 +33,7 @@ p.draw() = function() {
     }
 
     t = t + 0.01; // update time
-}}
+} 
+}
+
+var sketch = new p5(sketch, 'div1');
