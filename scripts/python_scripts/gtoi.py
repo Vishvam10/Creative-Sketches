@@ -76,7 +76,10 @@ def wrap_content(content, params):
 def global_replace(content, params):
     data = events_replace(content, params["namespacing_variable"])
     data = keyword_replace(data, params["namespacing_variable"])
-    data = wrap_content(data, params)
+    if(params["main_file"]):
+        print("MAIN FILE : ", params["main_file"])
+        data = wrap_content(data, params)
+
     return data
 
 
@@ -116,6 +119,8 @@ if __name__ == "__main__":
                                      description="Parameter for global to instance mode script", allow_abbrev=True, add_help=True)
 
     parser.add_argument('file', type=str, help="The p5 sketch.js file")
+    parser.add_argument(
+        'main_file', type=bool, help="Is the main p5 sketch file ( main file is the one containing the setup() and draw() functions )")
 
     parser.add_argument('--namespacing_variable', action='store', type=str, default="p",
                         help="The string that will be prefixed with every p5 function")
@@ -143,6 +148,7 @@ if __name__ == "__main__":
 
         if(res == True):
             params = {
+                "main_file": args.main_file,
                 "namespacing_variable": args.namespacing_variable,
                 "new_sketch_name": args.new_sketch_name,
                 "html_element_id": args.html_element_id
@@ -154,7 +160,7 @@ if __name__ == "__main__":
             write_to_file(file_name, new_content)
 
         else:
-            print(res)
+            print("ERROR : ", res)
 
     else:
         print("No such file exists ! Please make sure that the script and the file are in the same directory.")

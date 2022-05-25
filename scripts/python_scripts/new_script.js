@@ -1,38 +1,58 @@
 var sketch = function(p) {
 
- let t = 0; // time variable
-
-p.setup() = function() {
-    p.createCanvas(600, 600);
-    p.noStroke();
-    p.fill(40, 200, 40);
-}
-
-p.preload() = function() {
-    console.log("asdfasfd");
-}
-
-p.draw() = function() {
-    p.background(10, 10); // translucent p.background (creates trails)
-
-    // make a x and y grid of ellipses
-    for (let x = 0; x <= p.width; x = x + 30) {
-        for (let y = 0; y <= p.height; y = y + 30) {
-            // starting p.point of each p.circle depends on mouse position
-            const xAngle = p.map(p.mouseX, 0, p.width, -4 * PI, 4 * PI, true);
-            const yAngle = p.map(p.mouseY, 0, p.height, -4 * PI, 4 * PI, true);
-            // and also varies based on the particle's location
-            const angle = xAngle * (x / p.width) + yAngle * (y / p.height);
-
-            // each particle moves in a p.circle
-            const myX = x + 20 * p.cos(2 * PI * t + angle);
-            const myY = y + 20 * p.sin(2 * PI * t + angle);
-
-            p.ellipse(myX, myY, 10); // draw particle
-        }
+ class Entity {
+    constructor(x, y, vx, vy, m) {
+        this.pos = p.createVector(x, y);
+        this.vel = p.createVector(vx, vy);
+        this.acc = p.createVector(0, 0);
+        this.mass = m;
+        this.r = p.sqrt(this.mass);
+        this.G = 0.005;
     }
 
-    t = t + 0.01; // update time
+    applyForce(force) {
+        let f = p.p.p5.Vector.div(force, this.mass);
+        this.acc.add(f);
+    }
+
+    attract(obj) {
+        let force = p.p.p5.Vector.sub(this.pos, obj.pos);
+        let distanceSq = p.constrain(force.magSq(), 10, 100);
+        let strength = (this.G * (this.mass * obj.mass)) / distanceSq;
+        force.setMag(strength);
+        obj.applyForce(force);
+    }
+
+    update() {
+        this.vel.add(this.acc);
+        this.pos.add(this.vel);
+        this.acc.p.set(0, 0);
+    }
+
+    show() {
+        p.stroke(255, 255, 255, 50);
+        p.fill("black");
+        p.ellipse(this.pos.x, this.pos.y, this.r * 2);
+    }
+    updateProperties(data) {
+        let d = p.dist(
+            p.mouseX - p.width / 2,
+            p.mouseY - p.height / 2,
+            this.pos.x,
+            this.pos.y
+        );
+        console.log("DISTANCE : ", d < this.r);
+        if (d < this.r) {
+            if (data.shiftKey) {
+                let new_G = data.y / 500;
+                console.log("G : ", new_G);
+                this.G = p.constrain(new_G, -0.02, 0.02);
+            } else {
+                this.mass = p.abs(data.y * 50);
+                this.r = p.sqrt(this.mass);
+            }
+        }
+    }
 } 
 }
 

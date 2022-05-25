@@ -8,7 +8,7 @@ This is a python script to convert a p5 sketch from a global to instance mode. T
 - [x] Get all the p5 global variables, function and events
 - [x] Namespace p5 functions
 - [x] Create new sketch instances dynamically
-- [ ] Create a command line tool to execute the script with parameters
+- [x] Create a command line tool to execute the script with parameters
 - [ ] Format JS after replacing
 - [ ] Ignore comments
 
