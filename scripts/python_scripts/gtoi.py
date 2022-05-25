@@ -101,14 +101,12 @@ def check_params(params):
         msg = "Parameter names must be unique"
         return msg
     for param in params:
-        print("PARAMS : ", param)
-
-        # search_string = rf"^[a-zA-Z0-9!@#$&_]*$"
-        # res = re.match(search_string, param)
-        # if(res == None):
-        #     msg = "Parameter {} should contain only alphanumeric and these symbols : !@#$&_".format(
-        #         param)
-        #     return msg
+        search_string = rf"^[a-zA-Z0-9!@#$&_]*$"
+        res = re.match(search_string, param)
+        if(res == None):
+            msg = "Parameter {} should contain only alphanumeric and these symbols : !@#$&_".format(
+                param)
+            return msg
     return True
 
 
