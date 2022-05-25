@@ -1,4 +1,5 @@
-let t = 0; // time variable
+var s = function(p) {
+ let t = 0; // time variable
 
 p.setup() = function() {
     p.createCanvas(600, 600);
@@ -31,4 +32,4 @@ p.draw() = function() {
     }
 
     t = t + 0.01; // update time
-}
+}}
