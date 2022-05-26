@@ -6,6 +6,10 @@ function setup() {
     fill(40, 200, 40);
 }
 
+function preload() {
+    console.log("asdfasfd");
+}
+
 function draw() {
     background(10, 10); // translucent background (creates trails)
 

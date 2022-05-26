@@ -3,19 +3,22 @@ import re
 import sys
 import argparse
 import os
+import uuid
 
 disallowed_symbols = ["console", "log", "setup", "draw", "preload"]
+constants = ["HALF_PI", "PI", "QUARTER_PI",
+             "TAU", "TWO_PI", "DEGREES", "RADIANS", "JSON"]
 
 
 def get_functions():
     file_path = "./p5_reference.txt"
-    df = pd.read_csv(file_path, sep="\n\n", header=None)
+    df = pd.read_csv(file_path, sep="\n\n", header=None, engine="python")
     data = {}
     current_header = ""
 
     for item in df.values.tolist():
         ele = item[0].strip()
-        if(ele[0].isupper() and ele != "JSON"):
+        if(ele[0].isupper() and ele not in constants):
             data[ele] = []
             current_header = ele
         else:
@@ -37,6 +40,8 @@ def get_events():
 def events_replace(content, symbol='p'):
     new_content = content
     events = get_events()
+    events = list(map(lambda x: x.replace("()", ""), events))
+    print("EVENTS : ", events)
     for e in events:
         search_string = rf"\b(?=\w)function {e}\b(?!\w)"
         replace_string = "{}.{} = function".format(symbol, e)
@@ -84,8 +89,12 @@ def global_replace(content, params):
 
 
 def write_to_file(file_name, data):
+    f_name = file_name.split(".")[0]
+    f_ext = file_name.split(".")[1]
+    new_file_name = f_name + "_" + \
+        str(uuid.uuid4()).replace("-", "")[:10] + "." + f_ext
     try:
-        f = open(file_name, "w")
+        f = open(new_file_name, "w")
         try:
             f.write(data)
         except:
@@ -154,8 +163,6 @@ if __name__ == "__main__":
                 "html_element_id": args.html_element_id
             }
             new_content = global_replace(content, params)
-            print(new_content)
-
             file_name = "new_script.js"
             write_to_file(file_name, new_content)
 

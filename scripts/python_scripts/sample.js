@@ -1,34 +1,37 @@
-let t = 0; // time variable
+// Sketch One
+var s = function(p) {
+    var x = 100;
+    var y = 100;
+    p.setup = function() {
+        p.createCanvas(400, 200);
+    };
 
-function setup() {
-    createCanvas(600, 600);
-    noStroke();
-    fill(40, 200, 40);
-}
+    p.draw = function() {
+        p.background(0);
+        p.fill(255);
+        p.rect(x, y, 50, 50);
+    };
+};
+var myp5 = new p5(s, 'c1');
 
-function preload() {
-    console.log("asdfasfd");
-}
+// Sketch Two
+var t = function(p) {
+    var x = 100.0;
+    var y = 100;
+    var speed = 2.5;
+    p.setup = function() {
+        p.createCanvas(400, 200);
+    };
 
-function draw() {
-    background(10, 10); // translucent background (creates trails)
-
-    // make a x and y grid of ellipses
-    for (let x = 0; x <= width; x = x + 30) {
-        for (let y = 0; y <= height; y = y + 30) {
-            // starting point of each circle depends on mouse position
-            const xAngle = map(mouseX, 0, width, -4 * PI, 4 * PI, true);
-            const yAngle = map(mouseY, 0, height, -4 * PI, 4 * PI, true);
-            // and also varies based on the particle's location
-            const angle = xAngle * (x / width) + yAngle * (y / height);
-
-            // each particle moves in a circle
-            const myX = x + 20 * cos(2 * PI * t + angle);
-            const myY = y + 20 * sin(2 * PI * t + angle);
-
-            ellipse(myX, myY, 10); // draw particle
+    p.draw = function() {
+        p.background(100);
+        p.fill(1);
+        x += speed;
+        if (x > p.width) {
+            x = 0;
         }
-    }
+        p.ellipse(x, y, 50, 50);
 
-    t = t + 0.01; // update time
-}
+    };
+};
+var myp5 = new p5(t, 'c2');
