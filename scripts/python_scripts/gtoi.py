@@ -1,4 +1,3 @@
-import pandas as pd
 import re
 import sys
 import argparse
@@ -12,13 +11,14 @@ constants = ["HALF_PI", "PI", "QUARTER_PI",
 
 def get_functions():
     file_path = "./p5_reference.txt"
-    df = pd.read_csv(file_path, sep="\n\n", header=None, engine="python")
+    f = open(file_path, "r")
+
     data = {}
     current_header = ""
 
-    for item in df.values.tolist():
-        ele = item[0].strip()
-        if(ele[0].isupper() and ele not in constants):
+    for line in f:
+        ele = line.strip()
+        if(line[0].isupper() and line != "JSON"):
             data[ele] = []
             current_header = ele
         else:
@@ -26,7 +26,6 @@ def get_functions():
             data[current_header].append(ele)
 
     del data["Foundation"]
-
     return data
 
 
@@ -53,6 +52,7 @@ def events_replace(content, symbol='p'):
 def keyword_replace(content, symbol='p'):
     new_content = content
     functions = get_functions()
+    print(functions)
     for key, value in functions.items():
         for v in value:
             if(v in new_content and v not in disallowed_symbols):
