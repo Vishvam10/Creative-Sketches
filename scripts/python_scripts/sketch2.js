@@ -21,7 +21,7 @@ function setup() {
 
 function draw() {
     background(0);
-
+    console.log("object");
     fill(255, 0, 0);
     noStroke();
     target = createVector(mouseX, mouseY);

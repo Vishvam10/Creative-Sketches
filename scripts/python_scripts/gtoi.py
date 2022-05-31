@@ -40,7 +40,6 @@ def events_replace(content, symbol='p'):
     new_content = content
     events = get_events()
     events = list(map(lambda x: x.replace("()", ""), events))
-    print("EVENTS : ", events)
     for e in events:
         search_string = rf"\b(?=\w)function {e}\b(?!\w)"
         replace_string = "{}.{} = function".format(symbol, e)
@@ -52,7 +51,6 @@ def events_replace(content, symbol='p'):
 def keyword_replace(content, symbol='p'):
     new_content = content
     functions = get_functions()
-    print(functions)
     for key, value in functions.items():
         for v in value:
             if(v in new_content and v not in disallowed_symbols):
@@ -68,8 +66,10 @@ def wrap_content(content, params):
     html_element_id = params["html_element_id"]
     new_sketch_name = params["new_sketch_name"]
     new_content = content
-    new_content = "var {} = function({}) {{\n\n {} \n}}\n\nvar sketch = new p5({}, '{}');".format(
-        new_sketch_name, symbol, new_content, new_sketch_name, html_element_id)
+    if(params["main_file"]):
+        new_content = "var {} = function({}) {{\n\n {} \n}}\n\nvar sketch = new p5({}, '{}');".format(
+            new_sketch_name, symbol, new_content, new_sketch_name, html_element_id)
+
     return new_content
 
 
@@ -82,7 +82,6 @@ def global_replace(content, params):
     data = events_replace(content, params["namespacing_variable"])
     data = keyword_replace(data, params["namespacing_variable"])
     if(params["main_file"]):
-        print("MAIN FILE : ", params["main_file"])
         data = wrap_content(data, params)
 
     return data
@@ -122,14 +121,19 @@ def check_params(params):
     return True
 
 
+def check_if_file_exists(file_path):
+    if(os.path.exists(file_path)):
+        return True
+    return False
+
+
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter,
                                      description="Parameter for global to instance mode script", allow_abbrev=True, add_help=True)
 
-    parser.add_argument('file', type=str, help="The p5 sketch.js file")
-    parser.add_argument(
-        'main_file', type=bool, help="Is the main p5 sketch file ( main file is the one containing the setup() and draw() functions )")
+    parser.add_argument('files', type=str, nargs="+",
+                        help="In the format : [main_sketch.js, helper_file1.js, helper_file2.js, . . .]. The main_sketch.js file is the one containing draw() and setup() functions")
 
     parser.add_argument('--namespacing_variable', action='store', type=str, default="p",
                         help="The string that will be prefixed with every p5 function")
@@ -141,33 +145,46 @@ if __name__ == "__main__":
                         help="The ID of the HTML element without the hashtag (#) symbol")
 
     args = parser.parse_args()
+    print(args.files)
 
-    file_path = "./{}".format(args.file)
+    for i in range(0, len(args.files)):
+        file = args.files[i]
+        file_path = "./{}".format(file)
+        print(file_path)
+        if(check_if_file_exists(file_path)):
+            with open(file_path, 'r') as f:
+                content = f.readlines()
 
-    if(os.path.exists(file_path)):
-        with open(file_path, 'r') as f:
-            content = f.readlines()
+            content = ''.join(content)
 
-        content = ''.join(content)
+            params = [args.namespacing_variable,
+                      args.new_sketch_name, args.html_element_id]
 
-        params = [args.namespacing_variable,
-                  args.new_sketch_name, args.html_element_id]
+            res = check_params(params)
 
-        res = check_params(params)
+            if(res == True):
+                if(i == 0):
+                    params = {
+                        "main_file": True,
+                        "namespacing_variable": args.namespacing_variable,
+                        "new_sketch_name": args.new_sketch_name,
+                        "html_element_id": args.html_element_id
+                    }
+                else:
+                    params = {
+                        "main_file": False,
+                        "namespacing_variable": args.namespacing_variable,
+                        "new_sketch_name": args.new_sketch_name,
+                        "html_element_id": args.html_element_id
+                    }
+                print("PARAMS : ", params)
+                new_content = global_replace(content, params)
+                file_name = "new_script.js"
+                write_to_file(file_name, new_content)
 
-        if(res == True):
-            params = {
-                "main_file": args.main_file,
-                "namespacing_variable": args.namespacing_variable,
-                "new_sketch_name": args.new_sketch_name,
-                "html_element_id": args.html_element_id
-            }
-            new_content = global_replace(content, params)
-            file_name = "new_script.js"
-            write_to_file(file_name, new_content)
+            else:
+                print("ERROR : ", res)
 
         else:
-            print("ERROR : ", res)
-
-    else:
-        print("No such file exists ! Please make sure that the script and the file are in the same directory.")
+            print(
+                "No such file exists ! Please make sure that the script and the file are in the same directory.")
