@@ -2,6 +2,7 @@ import re
 import sys
 import argparse
 import os
+from traceback import print_tb
 import uuid
 
 disallowed_symbols = ["console", "log", "setup", "draw", "preload"]
@@ -62,13 +63,33 @@ def keyword_replace(content, symbol='p'):
 
 
 def wrap_content(content, params):
+    global im_search_string
+    global main_file
+
     symbol = params["namespacing_variable"]
     html_element_id = params["html_element_id"]
     new_sketch_name = params["new_sketch_name"]
     new_content = content
-    if(params["main_file"]):
-        new_content = "var {} = function({}) {{\n\n {} \n}}\n\nvar sketch = new p5({}, '{}');".format(
-            new_sketch_name, symbol, new_content, new_sketch_name, html_element_id)
+
+    if(params["is_main_file"]):
+        im_search_string = "var {} = function({})".format(
+            new_sketch_name, symbol)
+
+        new_content = "{}\n\nvar sketch = new p5({}, '{}');".format(
+            im_search_string, new_content, new_sketch_name, html_element_id)
+    else:
+        print("FILE PATH : ", main_file)
+        with open(main_file, 'r') as f:
+            content = f.readlines()
+        content = ''.join(content)
+        new_content = content
+
+        im_search_string = im_search_string + " {"
+        search_string = rf"{im_search_string}"
+        replace_string = "{} {}".format(im_search_string, new_content)
+        print("REPLACE STRING : ", replace_string)
+        new_content = re.sub(search_string, replace_string, new_content)
+        # print(new_content)
 
     return new_content
 
@@ -81,13 +102,14 @@ def wrap_content(content, params):
 def global_replace(content, params):
     data = events_replace(content, params["namespacing_variable"])
     data = keyword_replace(data, params["namespacing_variable"])
-    if(params["main_file"]):
-        data = wrap_content(data, params)
+    data = wrap_content(data, params)
 
     return data
 
 
-def write_to_file(file_name, data):
+def write_to_file(file_name, data, is_main_file):
+    global main_file
+
     f_name = file_name.split(".")[0]
     f_ext = file_name.split(".")[1]
     new_file_name = f_name + "_" + \
@@ -96,6 +118,8 @@ def write_to_file(file_name, data):
         f = open(new_file_name, "w")
         try:
             f.write(data)
+            if(is_main_file):
+                main_file = new_file_name
         except:
             print("Something went wrong when writing to the file",
                   sys.exc_info()[0])
@@ -129,6 +153,9 @@ def check_if_file_exists(file_path):
 
 if __name__ == "__main__":
 
+    main_file = ""
+    im_search_string = ""
+
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter,
                                      description="Parameter for global to instance mode script", allow_abbrev=True, add_help=True)
 
@@ -145,42 +172,43 @@ if __name__ == "__main__":
                         help="The ID of the HTML element without the hashtag (#) symbol")
 
     args = parser.parse_args()
-    print(args.files)
 
     for i in range(0, len(args.files)):
         file = args.files[i]
         file_path = "./{}".format(file)
-        print(file_path)
         if(check_if_file_exists(file_path)):
             with open(file_path, 'r') as f:
                 content = f.readlines()
 
             content = ''.join(content)
 
-            params = [args.namespacing_variable,
-                      args.new_sketch_name, args.html_element_id]
+            arguments = [args.namespacing_variable,
+                         args.new_sketch_name, args.html_element_id]
 
-            res = check_params(params)
+            res = check_params(arguments)
 
             if(res == True):
                 if(i == 0):
+                    main_file = file
                     params = {
-                        "main_file": True,
+                        "is_main_file": True,
                         "namespacing_variable": args.namespacing_variable,
                         "new_sketch_name": args.new_sketch_name,
                         "html_element_id": args.html_element_id
                     }
                 else:
                     params = {
-                        "main_file": False,
+                        "is_main_file": False,
                         "namespacing_variable": args.namespacing_variable,
                         "new_sketch_name": args.new_sketch_name,
                         "html_element_id": args.html_element_id
                     }
-                print("PARAMS : ", params)
                 new_content = global_replace(content, params)
                 file_name = "new_script.js"
-                write_to_file(file_name, new_content)
+                if(i == 0):
+                    write_to_file(file_name, new_content, True)
+                else:
+                    write_to_file(file_name, new_content, False)
 
             else:
                 print("ERROR : ", res)
