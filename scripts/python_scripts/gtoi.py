@@ -2,7 +2,7 @@ import re
 import sys
 import argparse
 import os
-from traceback import print_tb
+from unicodedata import name
 import uuid
 
 disallowed_symbols = ["console", "log", "setup", "draw", "preload"]
@@ -78,18 +78,24 @@ def wrap_content(content, params):
         new_content = "{}\n\nvar sketch = new p5({}, '{}');".format(
             im_search_string, new_content, new_sketch_name, html_element_id)
     else:
+        print("IS MAIN FILE : ", params["is_main_file"])
         print("FILE PATH : ", main_file)
+
         with open(main_file, 'r') as f:
             content = f.readlines()
         content = ''.join(content)
-        new_content = content
+        main_content = content
 
         im_search_string = im_search_string + " {"
         search_string = rf"{im_search_string}"
-        replace_string = "{} {}".format(im_search_string, new_content)
+        print("SEARCH STRING : ", search_string,
+              "SKETCH NAME : ", new_sketch_name)
+
+        replace_string = "{}".format(new_content)
+
         print("REPLACE STRING : ", replace_string)
-        new_content = re.sub(search_string, replace_string, new_content)
-        # print(new_content)
+
+        new_content = re.sub(search_string, replace_string, main_content)
 
     return new_content
 
@@ -126,7 +132,6 @@ def write_to_file(file_name, data, is_main_file):
         finally:
             f.close()
     except:
-
         print("Something went wrong when opening the file.", sys.exc_info()[0])
 
 
@@ -165,7 +170,7 @@ if __name__ == "__main__":
     parser.add_argument('--namespacing_variable', action='store', type=str, default="p",
                         help="The string that will be prefixed with every p5 function")
 
-    parser.add_argument('--new_sketch_name', action='store', type=str, default="sketch",
+    parser.add_argument('--new_sketch_name', action='store', type=str, default="new_sketch",
                         help="The name of the new sketch. This will be variable containing the p5 instance object")
 
     parser.add_argument('--html_element_id', action='store', type=str, default="div1",
@@ -204,10 +209,11 @@ if __name__ == "__main__":
                         "html_element_id": args.html_element_id
                     }
                 new_content = global_replace(content, params)
-                file_name = "new_script.js"
                 if(i == 0):
+                    file_name = "new_main_script.js"
                     write_to_file(file_name, new_content, True)
                 else:
+                    file_name = "new_script.js"
                     write_to_file(file_name, new_content, False)
 
             else:
