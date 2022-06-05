@@ -9,8 +9,8 @@ This is a python script to convert a p5 sketch from a global to instance mode. T
 - [x] Namespace p5 functions
 - [x] Create new sketch instances dynamically
 - [x] Create a command line tool to execute the script with parameters
-- [ ] Convert helper JS files too
-- [ ] Add helper classes to instance mode ( within the main sketch file )
+- [x] Convert helper JS files too
+- [x] Add helper classes to instance mode ( within the main sketch file )
 - [ ] Format JS after replacing
 - [ ] Ignore comments
 
