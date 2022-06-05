@@ -63,7 +63,6 @@ def keyword_replace(content, symbol='p'):
 
 
 def wrap_content(content, params):
-    global im_search_string
     global main_file
 
     symbol = params["namespacing_variable"]
@@ -71,31 +70,24 @@ def wrap_content(content, params):
     new_sketch_name = params["new_sketch_name"]
     new_content = content
 
+    im_search_string = "var {} = function({}) {{".format(
+        new_sketch_name, symbol)
+
     if(params["is_main_file"]):
-        im_search_string = "var {} = function({})".format(
-            new_sketch_name, symbol)
-
-        new_content = "{}\n\nvar sketch = new p5({}, '{}');".format(
-            im_search_string, new_content, new_sketch_name, html_element_id)
+        new_content = "var {} = function({}) {{\n\n {} \n}}\n\nvar sketch = new p5({}, '{}');".format(
+            new_sketch_name, symbol, new_content, new_sketch_name, html_element_id)
     else:
-        print("IS MAIN FILE : ", params["is_main_file"])
-        print("FILE PATH : ", main_file)
-
         with open(main_file, 'r') as f:
             content = f.readlines()
+
         content = ''.join(content)
-        main_content = content
-
-        im_search_string = im_search_string + " {"
         search_string = rf"{im_search_string}"
-        print("SEARCH STRING : ", search_string,
-              "SKETCH NAME : ", new_sketch_name)
 
-        replace_string = "{}".format(new_content)
+        main_content = content.replace(search_string, "")
+        replace_string = "{} {} {}".format(
+            search_string, new_content, main_content)
 
-        print("REPLACE STRING : ", replace_string)
-
-        new_content = re.sub(search_string, replace_string, main_content)
+        new_content = replace_string
 
     return new_content
 
@@ -118,8 +110,9 @@ def write_to_file(file_name, data, is_main_file):
 
     f_name = file_name.split(".")[0]
     f_ext = file_name.split(".")[1]
-    new_file_name = f_name + "_" + \
-        str(uuid.uuid4()).replace("-", "")[:10] + "." + f_ext
+    new_file_name = f_name + "." + f_ext
+    # For hashed file name, append this to new_file_name : + "_" + \ str(uuid.uuid4()).replace("-", "")[:10] + "." + f_ext
+
     try:
         f = open(new_file_name, "w")
         try:
@@ -159,7 +152,6 @@ def check_if_file_exists(file_path):
 if __name__ == "__main__":
 
     main_file = ""
-    im_search_string = ""
 
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter,
                                      description="Parameter for global to instance mode script", allow_abbrev=True, add_help=True)
@@ -209,13 +201,8 @@ if __name__ == "__main__":
                         "html_element_id": args.html_element_id
                     }
                 new_content = global_replace(content, params)
-                if(i == 0):
-                    file_name = "new_main_script.js"
-                    write_to_file(file_name, new_content, True)
-                else:
-                    file_name = "new_script.js"
-                    write_to_file(file_name, new_content, False)
-
+                file_name = "new_main_script.js"
+                write_to_file(file_name, new_content, True)
             else:
                 print("ERROR : ", res)
 
