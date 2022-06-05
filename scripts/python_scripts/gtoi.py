@@ -2,12 +2,24 @@ import re
 import sys
 import argparse
 import os
-from unicodedata import name
-import uuid
+# import uuid
 
 disallowed_symbols = ["console", "log", "setup", "draw", "preload"]
 constants = ["HALF_PI", "PI", "QUARTER_PI",
              "TAU", "TWO_PI", "DEGREES", "RADIANS", "JSON"]
+
+
+class CommandLineTextFormat:
+    PURPLE = '\033[95m'
+    CYAN = '\033[96m'
+    DARKCYAN = '\033[36m'
+    BLUE = '\033[94m'
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    RED = '\033[91m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+    END = '\033[0m'
 
 
 def get_functions():
@@ -136,6 +148,12 @@ def check_params(params):
     for param in params:
         search_string = rf"^[a-zA-Z0-9!@#$&_]*$"
         res = re.match(search_string, param)
+
+        if param in get_functions() or param in get_events() or param in disallowed_symbols or param in constants:
+            msg = "Parameter " + CommandLineTextFormat.BOLD + param + CommandLineTextFormat.END + \
+                " is one of the p5 or javascript reserved keywords. Please use a different name."
+            return msg
+
         if(res == None):
             msg = "Parameter {} should contain only alphanumeric and these symbols : !@#$&_".format(
                 param)
@@ -159,14 +177,14 @@ if __name__ == "__main__":
     parser.add_argument('files', type=str, nargs="+",
                         help="In the format : [main_sketch.js, helper_file1.js, helper_file2.js, . . .]. The main_sketch.js file is the one containing draw() and setup() functions")
 
-    parser.add_argument('--namespacing_variable', action='store', type=str, default="p",
+    parser.add_argument('-nspv', '--namespacing_variable', action='store', type=str, default="p",
                         help="The string that will be prefixed with every p5 function")
 
-    parser.add_argument('--new_sketch_name', action='store', type=str, default="new_sketch",
+    parser.add_argument('-nsk', '--new_sketch_name', action='store', type=str, default="new_sketch",
                         help="The name of the new sketch. This will be variable containing the p5 instance object")
 
-    parser.add_argument('--html_element_id', action='store', type=str, default="div1",
-                        help="The ID of the HTML element without the hashtag (#) symbol")
+    parser.add_argument('-id', '--html_element_id', action='store', type=str, default="div1",
+                        help="\n\nThe ID of the HTML element without the hashtag (#) symbol")
 
     args = parser.parse_args()
 
@@ -204,7 +222,10 @@ if __name__ == "__main__":
                 file_name = "new_main_script.js"
                 write_to_file(file_name, new_content, True)
             else:
-                print("ERROR : ", res)
+                msg = CommandLineTextFormat.BOLD + CommandLineTextFormat.RED + \
+                    "ERROR : " + CommandLineTextFormat.END
+                print(msg, res)
+                exit(0)
 
         else:
             print(
