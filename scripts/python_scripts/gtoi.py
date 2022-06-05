@@ -3,7 +3,7 @@ import sys
 import argparse
 # import subprocess
 import os
-import pip
+# import pip
 # import uuid
 
 disallowed_symbols = ["console", "log", "setup", "draw", "preload"]
