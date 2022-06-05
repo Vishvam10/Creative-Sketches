@@ -1,7 +1,9 @@
 import re
 import sys
 import argparse
+# import subprocess
 import os
+import pip
 # import uuid
 
 disallowed_symbols = ["console", "log", "setup", "draw", "preload"]
@@ -21,6 +23,9 @@ class CommandLineTextFormat:
     UNDERLINE = '\033[4m'
     END = '\033[0m'
 
+
+# def install_package(package):
+#     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
 def get_functions():
     file_path = "./p5_reference.txt"
@@ -117,7 +122,7 @@ def global_replace(content, params):
     return data
 
 
-def write_to_file(file_name, data, is_main_file):
+def write_to_file(file_name, data, is_main_file, minify=False):
     global main_file
 
     f_name = file_name.split(".")[0]
@@ -141,8 +146,7 @@ def write_to_file(file_name, data, is_main_file):
 
 
 def check_params(params):
-    params_is_unique = len(set(params)) == len(params)
-    if(not params_is_unique):
+    if(not len(set(params)) == len(params)):
         msg = "Parameter names must be unique"
         return msg
     for param in params:
@@ -186,6 +190,12 @@ if __name__ == "__main__":
     parser.add_argument('-id', '--html_element_id', action='store', type=str, default="div1",
                         help="\n\nThe ID of the HTML element without the hashtag (#) symbol")
 
+    parser.add_argument('-c', '--combine', action='store', type=bool,
+                        default=True, help="Add all the helper files to the main sketch")
+
+    parser.add_argument('-m', '--minify', action='store', type=bool,
+                        default=False, help="Minify the final code")
+
     args = parser.parse_args()
 
     for i in range(0, len(args.files)):
@@ -198,7 +208,7 @@ if __name__ == "__main__":
             content = ''.join(content)
 
             arguments = [args.namespacing_variable,
-                         args.new_sketch_name, args.html_element_id]
+                         args.new_sketch_name, args.html_element_id, args.combine, args.minify]
 
             res = check_params(arguments)
 
@@ -220,7 +230,7 @@ if __name__ == "__main__":
                     }
                 new_content = global_replace(content, params)
                 file_name = "new_main_script.js"
-                write_to_file(file_name, new_content, True)
+                write_to_file(file_name, new_content, True, args.minify)
             else:
                 msg = CommandLineTextFormat.BOLD + CommandLineTextFormat.RED + \
                     "ERROR : " + CommandLineTextFormat.END
