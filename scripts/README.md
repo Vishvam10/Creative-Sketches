@@ -15,7 +15,7 @@ This is a python script to convert a p5 sketch from a global to instance mode. T
 - [ ] Ignore comments
 
 
-### Optional Functionalities : 
+## Optional Functionalities : 
 
 - [ ] Convert scripts with multiple imports and exports
 - [ ] Convert all p5 scripts in a folder into instance mode   

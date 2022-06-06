@@ -150,18 +150,21 @@ def check_params(params):
         msg = "Parameter names must be unique"
         return msg
     for param in params:
+        msg = "Parameter " + CommandLineTextFormat.BOLD + \
+            str(param) + CommandLineTextFormat.END
+        print(msg)
         search_string = rf"^[a-zA-Z0-9!@#$&_]*$"
-        res = re.match(search_string, param)
+        if(type(param) == str):
+            res = re.match(search_string, param)
+            if(res == None):
+                msg = "Parameter {} {} {} should contain only alphanumeric and these symbols : !, @, #, $, & and _".format(
+                    CommandLineTextFormat.BOLD, param, CommandLineTextFormat.END)
+                return msg
+            if param in get_functions() or param in get_events() or param in disallowed_symbols or param in constants:
+                msg = "Parameter " + CommandLineTextFormat.BOLD + param + CommandLineTextFormat.END + \
+                    " is one of the p5 or javascript reserved keywords. Please use a different name."
+                return msg
 
-        if param in get_functions() or param in get_events() or param in disallowed_symbols or param in constants:
-            msg = "Parameter " + CommandLineTextFormat.BOLD + param + CommandLineTextFormat.END + \
-                " is one of the p5 or javascript reserved keywords. Please use a different name."
-            return msg
-
-        if(res == None):
-            msg = "Parameter {} should contain only alphanumeric and these symbols : !@#$&_".format(
-                param)
-            return msg
     return True
 
 
@@ -230,7 +233,8 @@ if __name__ == "__main__":
                     }
                 new_content = global_replace(content, params)
                 file_name = "new_main_script.js"
-                write_to_file(file_name, new_content, True, args.minify)
+                write_to_file(file_name, new_content,
+                              params["is_main_file"], args.minify)
             else:
                 msg = CommandLineTextFormat.BOLD + CommandLineTextFormat.RED + \
                     "ERROR : " + CommandLineTextFormat.END
