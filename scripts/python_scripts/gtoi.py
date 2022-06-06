@@ -4,7 +4,7 @@ import argparse
 # import subprocess
 import os
 # import pip
-# import uuid
+import uuid
 
 disallowed_symbols = ["console", "log", "setup", "draw", "preload"]
 constants = ["HALF_PI", "PI", "QUARTER_PI",
@@ -93,7 +93,7 @@ def wrap_content(content, params):
     if(params["is_main_file"]):
         new_content = "var {} = function({}) {{\n\n {} \n}}\n\nvar sketch = new p5({}, '{}');".format(
             new_sketch_name, symbol, new_content, new_sketch_name, html_element_id)
-    else:
+    if(params["separate"]):
         with open(main_file, 'r') as f:
             content = f.readlines()
 
@@ -122,13 +122,18 @@ def global_replace(content, params):
     return data
 
 
-def write_to_file(file_name, data, is_main_file, minify=False):
+def write_to_file(file_name, data, is_main_file, hash_file_name, minify=False):
     global main_file
 
     f_name = file_name.split(".")[0]
     f_ext = file_name.split(".")[1]
-    new_file_name = f_name + "." + f_ext
-    # For hashed file name, append this to new_file_name : + "_" + \ str(uuid.uuid4()).replace("-", "")[:10] + "." + f_ext
+    if(not hash_file_name):
+        new_file_name = f_name + "." + f_ext
+        print("IN IF : ", new_file_name)
+    else:
+        new_file_name = f_name + "_" + \
+            str(uuid.uuid4()).replace("-", "s")[:10] + "." + f_ext
+        print("IN ELSE : ", new_file_name)
 
     try:
         f = open(new_file_name, "w")
@@ -150,9 +155,6 @@ def check_params(params):
         msg = "Parameter names must be unique"
         return msg
     for param in params:
-        msg = "Parameter " + CommandLineTextFormat.BOLD + \
-            str(param) + CommandLineTextFormat.END
-        print(msg)
         search_string = rf"^[a-zA-Z0-9!@#$&_]*$"
         if(type(param) == str):
             res = re.match(search_string, param)
@@ -193,10 +195,10 @@ if __name__ == "__main__":
     parser.add_argument('-id', '--html_element_id', action='store', type=str, default="div1",
                         help="\n\nThe ID of the HTML element without the hashtag (#) symbol")
 
-    parser.add_argument('-c', '--combine', action='store', type=bool,
+    parser.add_argument('-s', '--separate', action='store_false',
                         default=True, help="Add all the helper files to the main sketch")
 
-    parser.add_argument('-m', '--minify', action='store', type=bool,
+    parser.add_argument('-m', '--minify', action='store_true',
                         default=False, help="Minify the final code")
 
     args = parser.parse_args()
@@ -211,30 +213,43 @@ if __name__ == "__main__":
             content = ''.join(content)
 
             arguments = [args.namespacing_variable,
-                         args.new_sketch_name, args.html_element_id, args.combine, args.minify]
+                         args.new_sketch_name, args.html_element_id]
 
             res = check_params(arguments)
 
             if(res == True):
                 if(i == 0):
+                    hash_file_name = False
                     main_file = file
                     params = {
                         "is_main_file": True,
+                        "separate": args.separate,
                         "namespacing_variable": args.namespacing_variable,
                         "new_sketch_name": args.new_sketch_name,
                         "html_element_id": args.html_element_id
                     }
+                    new_content = global_replace(content, params)
+                    new_file = "new_main_script.js"
+                    write_to_file(
+                        new_file, new_content, params["is_main_file"], hash_file_name, args.minify)
                 else:
                     params = {
                         "is_main_file": False,
+                        "separate": args.separate,
                         "namespacing_variable": args.namespacing_variable,
                         "new_sketch_name": args.new_sketch_name,
                         "html_element_id": args.html_element_id
                     }
-                new_content = global_replace(content, params)
-                file_name = "new_main_script.js"
-                write_to_file(file_name, new_content,
-                              params["is_main_file"], args.minify)
+                    new_content = global_replace(content, params)
+                    if(not args.separate):
+                        hash_file_name = True
+                        write_to_file(
+                            file, new_content, params["is_main_file"], hash_file_name, args.minify)
+                    else:
+                        hash_file_name = False
+                        write_to_file(
+                            file, new_content, params["is_main_file"], hash_file_name, args.minify)
+
             else:
                 msg = CommandLineTextFormat.BOLD + CommandLineTextFormat.RED + \
                     "ERROR : " + CommandLineTextFormat.END
