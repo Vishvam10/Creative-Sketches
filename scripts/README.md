@@ -25,5 +25,6 @@ This is a python script to convert a p5 sketch from a global to instance mode. T
 
 ## Issues
 
+- [ ] Appends multiple `namespacing_variable` while working with multiple helper functions
 - [ ] p5 global functions are still prefixed with namespacing variable
-- [ ] A few functions like strokeWeight are not getting recognized when multiple classes are involved
+- [ ] A few functions like strokeWeight are not getting recognized when separating multiple helper files are involved
