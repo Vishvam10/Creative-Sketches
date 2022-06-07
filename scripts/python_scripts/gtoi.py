@@ -1,10 +1,9 @@
 import re
 import sys
 import argparse
-# import subprocess
 import os
-# import pip
 import uuid
+from jsmin import jsmin
 
 disallowed_symbols = ["console", "log", "setup", "draw", "preload"]
 constants = ["HALF_PI", "PI", "QUARTER_PI",
@@ -110,31 +109,38 @@ def wrap_content(content, params):
     return new_content
 
 
+def minify_code(data):
+    print("IN MINIFY")
+    minified_content = jsmin(data)
+    msg = "{} {} {}".format(CommandLineTextFormat.GREEN,
+                            minified_content, CommandLineTextFormat.END)
+    print(msg)
+    data = minified_content
+    return data
+
 # TODO
 # def ignore_comments(content) :
 #     return
 
 
-def global_replace(content, params):
+def global_replace(content, params, minify_content=False):
     data = events_replace(content, params["namespacing_variable"])
     data = keyword_replace(data, params["namespacing_variable"])
     data = wrap_content(data, params)
-
     return data
 
 
-def write_to_file(file_name, data, is_main_file, hash_file_name, minify=False):
+def write_to_file(file_name, data, is_main_file, hash_file_name=False):
     global main_file
 
     f_name = file_name.split(".")[0]
     f_ext = file_name.split(".")[1]
     if(not hash_file_name):
         new_file_name = f_name + "." + f_ext
-        print("IN IF : ", new_file_name)
     else:
         new_file_name = f_name + "_" + \
             str(uuid.uuid4()).replace("-", "s")[:10] + "." + f_ext
-        print("IN ELSE : ", new_file_name)
+        print("FILE NAME : ", new_file_name)
 
     try:
         f = open(new_file_name, "w")
@@ -143,12 +149,15 @@ def write_to_file(file_name, data, is_main_file, hash_file_name, minify=False):
             if(is_main_file):
                 main_file = new_file_name
         except:
-            print("Something went wrong when writing to the file",
-                  sys.exc_info()[0])
+            msg = "{} {} ERROR {} : Something went wrong when opening the file : {} {} {}".format(
+                CommandLineTextFormat.BOLD, CommandLineTextFormat.RED, CommandLineTextFormat.END, CommandLineTextFormat.BOLD, file_name, CommandLineTextFormat.END)
+            print(msg, sys.exc_info()[0])
         finally:
             f.close()
     except:
-        print("Something went wrong when opening the file.", sys.exc_info()[0])
+        msg = "{} {} ERROR {} : Something went wrong when opening the file : {} {} {}".format(
+            CommandLineTextFormat.BOLD, CommandLineTextFormat.RED, CommandLineTextFormat.END, CommandLineTextFormat.BOLD, file_name, CommandLineTextFormat.END)
+        print(msg, sys.exc_info()[0])
 
 
 def check_params(params):
@@ -199,7 +208,7 @@ if __name__ == "__main__":
     parser.add_argument('-s', '--separate', action='store_true',
                         default=False, help="Add all the helper files to the main sketch")
 
-    parser.add_argument('-m', '--minify', action='store_true',
+    parser.add_argument('-m', '--minify_content', action='store_true',
                         default=False, help="Minify the final code")
 
     args = parser.parse_args()
@@ -233,10 +242,11 @@ if __name__ == "__main__":
                         "new_sketch_name": args.new_sketch_name,
                         "html_element_id": args.html_element_id
                     }
-                    new_content = global_replace(content, params)
+                    new_content = global_replace(
+                        content, params, args.minify_content)
                     new_file = "new_main_script.js"
                     write_to_file(
-                        new_file, new_content, params["is_main_file"], hash_file_name, args.minify)
+                        new_file, new_content, params["is_main_file"], hash_file_name)
                 else:
                     params = {
                         "is_main_file": False,
@@ -245,15 +255,16 @@ if __name__ == "__main__":
                         "new_sketch_name": args.new_sketch_name,
                         "html_element_id": args.html_element_id
                     }
-                    new_content = global_replace(content, params)
+                    new_content = global_replace(
+                        content, params,  args.minify_content)
                     if(not args.separate):
                         hash_file_name = False
                         write_to_file(
-                            main_file, new_content, params["is_main_file"], hash_file_name, args.minify)
+                            main_file, new_content, params["is_main_file"], hash_file_name)
                     else:
                         hash_file_name = True
                         write_to_file(
-                            file, new_content, params["is_main_file"], hash_file_name, args.minify)
+                            file, new_content, params["is_main_file"], hash_file_name)
 
             else:
                 msg = CommandLineTextFormat.BOLD + CommandLineTextFormat.RED + \
@@ -264,3 +275,15 @@ if __name__ == "__main__":
         else:
             print(
                 "No such file exists ! Please make sure that the script and the file are in the same directory.")
+
+    if(args.minify_content and not args.separate):
+        file_name = main_file
+        is_main_file = True
+        hash_file_name = False
+        if(check_if_file_exists(file_name)):
+            with open(file_name, 'r') as f:
+                content = f.readlines()
+            content = ''.join(content)
+            data = minify_code(content)
+
+            write_to_file(file_name, data, is_main_file, hash_file_name)
