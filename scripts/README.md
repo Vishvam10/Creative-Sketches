@@ -11,7 +11,7 @@ This is a python script to convert a p5 sketch from a global to instance mode. T
 - [x] Create a command line tool to execute the script with parameters
 - [x] Convert helper JS files too
 - [x] Add helper classes to instance mode ( within the main sketch file )
-- [ ] Add `minify` and `combine_helpers_into_main_script` functionality
+- [x] Add `minify` and `combine_helpers_into_main_script` functionality
 - [ ] Ignore comments
 
 
