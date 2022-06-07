@@ -93,18 +93,19 @@ def wrap_content(content, params):
     if(params["is_main_file"]):
         new_content = "var {} = function({}) {{\n\n {} \n}}\n\nvar sketch = new p5({}, '{}');".format(
             new_sketch_name, symbol, new_content, new_sketch_name, html_element_id)
-    if(params["separate"]):
-        with open(main_file, 'r') as f:
-            content = f.readlines()
+    else:
+        if(not params["separate"]):
+            with open(main_file, 'r') as f:
+                content = f.readlines()
 
-        content = ''.join(content)
-        search_string = rf"{im_search_string}"
+            content = ''.join(content)
+            search_string = rf"{im_search_string}"
 
-        main_content = content.replace(search_string, "")
-        replace_string = "{} {} {}".format(
-            search_string, new_content, main_content)
+            main_content = content.replace(search_string, "")
+            replace_string = "{} {} {}".format(
+                search_string, new_content, main_content)
 
-        new_content = replace_string
+            new_content = replace_string
 
     return new_content
 
@@ -195,13 +196,17 @@ if __name__ == "__main__":
     parser.add_argument('-id', '--html_element_id', action='store', type=str, default="div1",
                         help="\n\nThe ID of the HTML element without the hashtag (#) symbol")
 
-    parser.add_argument('-s', '--separate', action='store_false',
-                        default=True, help="Add all the helper files to the main sketch")
+    parser.add_argument('-s', '--separate', action='store_true',
+                        default=False, help="Add all the helper files to the main sketch")
 
     parser.add_argument('-m', '--minify', action='store_true',
                         default=False, help="Minify the final code")
 
     args = parser.parse_args()
+
+    msg = "{} {} {}".format(CommandLineTextFormat.BOLD,
+                            args.separate, CommandLineTextFormat.END)
+    print(msg)
 
     for i in range(0, len(args.files)):
         file = args.files[i]
@@ -242,11 +247,11 @@ if __name__ == "__main__":
                     }
                     new_content = global_replace(content, params)
                     if(not args.separate):
-                        hash_file_name = True
-                        write_to_file(
-                            file, new_content, params["is_main_file"], hash_file_name, args.minify)
-                    else:
                         hash_file_name = False
+                        write_to_file(
+                            main_file, new_content, params["is_main_file"], hash_file_name, args.minify)
+                    else:
+                        hash_file_name = True
                         write_to_file(
                             file, new_content, params["is_main_file"], hash_file_name, args.minify)
 
