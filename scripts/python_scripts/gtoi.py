@@ -20,11 +20,7 @@ class CommandLineTextFormat:
     RED = '\033[91m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
-    END = '\033[0m'
-
-
-# def install_package(package):
-#     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+    END = '\033[0m'    
 
 def get_functions():
     file_path = "./p5_reference.txt"
@@ -110,13 +106,8 @@ def wrap_content(content, params):
 
 
 def minify_code(data):
-    print("IN MINIFY")
     minified_content = jsmin(data)
-    msg = "{} {} {}".format(CommandLineTextFormat.GREEN,
-                            minified_content, CommandLineTextFormat.END)
-    print(msg)
-    data = minified_content
-    return data
+    return minified_content
 
 # TODO
 # def ignore_comments(content) :
@@ -140,7 +131,6 @@ def write_to_file(file_name, data, is_main_file, hash_file_name=False):
     else:
         new_file_name = f_name + "_" + \
             str(uuid.uuid4()).replace("-", "s")[:10] + "." + f_ext
-        print("FILE NAME : ", new_file_name)
 
     try:
         f = open(new_file_name, "w")
@@ -213,10 +203,6 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    msg = "{} {} {}".format(CommandLineTextFormat.BOLD,
-                            args.separate, CommandLineTextFormat.END)
-    print(msg)
-
     for i in range(0, len(args.files)):
         file = args.files[i]
         file_path = "./{}".format(file)
@@ -273,8 +259,9 @@ if __name__ == "__main__":
                 exit(0)
 
         else:
-            print(
-                "No such file exists ! Please make sure that the script and the file are in the same directory.")
+            msg = CommandLineTextFormat.BOLD + CommandLineTextFormat.RED + \
+                    "ERROR : " + CommandLineTextFormat.END
+            print(msg, "No such file exists ! Please make sure that the script and the file are in the same directory.")
 
     if(args.minify_content and not args.separate):
         file_name = main_file
