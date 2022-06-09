@@ -95,3 +95,4 @@ Use `python gtoi.py -h` or `python gtoi.py --help` to view the CLI arguments whi
 - [x] Appends multiple `namespacing_variable` while working with multiple helper functions
 - [ ] p5 global functions are still prefixed with namespacing variable
 - [ ] A few functions like strokeWeight are not getting recognized when separating multiple helper files are involved
+- [ ] p5 variables that are native to the classes ( i.e. it has a `this` keyword before it ) are getting namespaced too
