@@ -6,7 +6,7 @@ This is a command line tool for converting a p5 sketch from a global to instance
 
 ## Dependencies
 
-Only `jsmin` for code minification. Install it using `pip` : ( Use pip3 if there is some problem with the installation )
+Only `jsmin` for code minification. Install it using `pip` ( Use pip3 if there is some problem with the installation ) :
 
 
     pip install jsmin
