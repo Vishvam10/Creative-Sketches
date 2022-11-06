@@ -1,5 +1,5 @@
 class Entity {
-    constructor(x, y, vx=0, vy=0, radius=8, m=10, color="rgba(255, 255, 255, 1)") {
+    constructor(x, y, vx=0, vy=0, radius=2, m=10, color="rgba(255, 255, 255, 1)") {
         this.pos = createVector(x, y);
         this.vel = createVector(vx, vy);
         this.acc = createVector(0, 0);
@@ -13,6 +13,14 @@ class Entity {
       this.acc.add(f);
     }
 
+    applyVelocity(velocity, dir) {
+        if(dir == 1) {
+            this.pos.add(velocity);
+        } else {
+            this.pos.sub(velocity);
+        }
+    }
+
     // attract(obj) {
     //   let force = p5.Vector.sub(this.pos, obj.pos);
     //   let distanceSq = constrain(force.magSq(), 10, 100);
@@ -22,27 +30,17 @@ class Entity {
     // }
 
     wrap() {
-        let hit = false;
-        if (this.pos.x > width + this.size) {
-            this.pos.x = -this.size;
-            hit = true;
-        } else if (this.pos.x < -this.size) {
-            this.pos.x = width + this.size;
-            hit = true;
+        if (this.pos.x > width + this.r) {
+            this.pos.x = -this.r;
+        } else if (this.pos.x < -this.r) {
+            this.pos.x = width + this.r;
         }
-        if (this.pos.y > height + this.size) {
-            this.pos.y = -this.size;
-            hit = true;
-        } else if (this.pos.y < -this.size) {
-            this.pos.y = height + this.size;
-            hit = true;
-        }
-        if (hit) {
-            this.cur_path = [];
-            this.paths.push(this.cur_path);
+        if (this.pos.y > height + this.r) {
+            this.pos.y = -this.r;
+        } else if (this.pos.y < -this.r) {
+            this.pos.y = height + this.r;
         }
     }
-
     update() {
         this.vel.add(this.acc);
         // this.vel.limit(this.maxSpeed);
@@ -50,9 +48,10 @@ class Entity {
         this.acc.set(0, 0);
     }
 
-    show() {
-        stroke(255, 255, 255, 50);
-        fill(this.color);
+    show(col=this.color) {
+        // stroke(255, 255, 255, 50);
+        noStroke();
+        fill(col);
         circle(this.pos.x, this.pos.y, this.r * 2);
     }
 }

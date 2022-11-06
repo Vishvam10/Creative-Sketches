@@ -5,8 +5,14 @@ var sliderPan;
 var sliderVolume;
 var w;
 var agent;
+var pause = false;
+var prev = -1;
 
 var delta = 0.01;
+
+// [RIGHT, UP, DOWN, LEFT]
+var angles = [0, Math.PI/2, Math.PI, 3*Math.PI/2]
+var colors = ["#ff0000", "#ff8800", "#eaff00", "#73ff00"]
 
 function loaded() {
   song.play();
@@ -22,6 +28,15 @@ function togglePlay() {
   }
 }
 
+function PauseAnimation() {
+  pause = true;
+}
+
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+
+
 function setup() {
   const width = windowWidth - 400;
   const height = windowHeight - 50;
@@ -31,7 +46,9 @@ function setup() {
   sliderRate = createSlider(0, 1.5, 1, 0.01);
   sliderPan = createSlider(-1, 1, 0, 0.01);
   sliderVolume = createSlider(0, 1, 0.5, 0.01);
-  btn = createButton("Pause / Play");
+  pauseBtn = createButton("Pause / Play Animation");
+  pauseBtn.mousePressed(PauseAnimation);
+  btn = createButton("Pause / Play Audio");
   btn.mousePressed(togglePlay);
   fft = new p5.FFT(0, 128);
   w = width / 64;
@@ -39,51 +56,62 @@ function setup() {
 }
 
 function draw() {
+  if (pause) {
+    return;
+  }
   song.pan(sliderPan.value());
   song.rate(sliderRate.value());
   song.setVolume(sliderVolume.value());
 
   let spectrum = fft.analyze();
-  // background(220);
+  let energy = fft.getEnergy("bass")
+  console.log(energy);
+  // console.log(spectrum);
+  // background(0);
 
   // noStroke();
-  let force = createVector(0, 0);
-  // let avg = 0;
-  for (let i = 0; i< spectrum.length; i++){
+  // for (let i = 0; i< spectrum.length; i++){
     
-    let amp = spectrum[i];
-    let y = map(amp, 0, 256, height, 0);
+  //   let dir = [];
+  //   // [RIGHT, UP, DOWN, LEFT]
 
-    let L = spectrum.slice(0, 3).reduce((a, b) => a + b, 0) / 4;
-    let R = spectrum.slice(4, 8).reduce((a, b) => a + b, 0) / 4;
-    let U = spectrum.slice(9, 12).reduce((a, b) => a + b, 0) / 4;
-    let D = spectrum.slice(13, 16).reduce((a, b) => a + b, 0) / 4;
-`x`
-    // console.log(max(L, R, U, D));
+  //   dir[0] = (spectrum.slice(9, 12).reduce((a, b) => a + b, 0) / 4) / 256;
+  //   dir[1] = (spectrum.slice(4, 8).reduce((a, b) => a + b, 0) / 4) / 512;
+  //   dir[2] = (spectrum.slice(13, 16).reduce((a, b) => a + b, 0) / 4) / 256;
+  //   dir[3] = (spectrum.slice(0, 3).reduce((a, b) => a + b, 0) / 4) / 256;
+  //   v = -1;
+  //   ang_ind = -1;
+  //   for(let j=0; j<3; j++) {
+  //     if(dir[j] > v) {
+  //       v = dir[j];
+  //       ang_ind = j;
+  //     }
+  //   }
+  //   if(ang_ind != prev) {
+  //     v = v * 5000;
+  //   } else {
+  //     v = v * 10;
+  //   }
+  //   prev = ang_ind;
+  //   // console.log(max(L, R, U, D));
+  // }
+  // let vel = p5.Vector.fromAngle(angles[ang_ind], v)
+  // console.log(ang_ind);
+  // if(ang_ind == 0 || ang_ind == 2) {
+  //   agent.applyVelocity(vel, 0);
+  // } else {
+  //   agent.applyVelocity(vel, 1);
 
-    // if(i <= 4) {
-    //   fill("#ff0000");
-    // } else if(i > 4 && i <= 8) {
-    //   fill("#ff8800");
-    // } else if(i > 8 && i <= 12) {
-    //   fill("#eaff00");
-    // } else if(i > 12 && i <= 16){
-    //   fill("#73ff00");
-    // }  
-    // rect(i*w, y, w - 2, height - y);
-  }
-  // console.log("FRAME : ", frameCount, " VELOCITY : ", vel);
-  
-  agent.applyForce(force);
-  agent.wrap();
-  agent.update();
-  agent.show();
+  // }
+  // agent.wrap();
+  // agent.update();
+  // agent.show(colors[ang_ind]);
   // text(spectrum.length, width/2, height/2)
 
   // let waveform = fft.waveform();
   // noFill();
   // beginShape();
-  // stroke(20);
+  // stroke(255);
   // for (let i = 0; i < waveform.length; i++){
   //   let x = map(i, 0, waveform.length, 0, width);
   //   let y = map( waveform[i], -1, 1, 0, height);
