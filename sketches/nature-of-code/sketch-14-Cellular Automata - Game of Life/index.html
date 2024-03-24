@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sketch-14</title>
+</head>
+<style>
+    /* @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap'); */
+    
+    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap');
+    html {
+        font-size: 63.5%;
+    }
+    
+    body {
+        font-family: 'Fira Code', monospace;
+        padding: 1rem;
+        overflow-x: hidden;
+        font-smooth: always;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+    }
+    
+    canvas {
+        border-radius: 1rem;
+    }
+    
+    a {
+        text-decoration: none;
+        list-style: none;
+        color: black;
+    }
+    
+    #controls {
+        width: max-content;
+        margin: -2rem 0rem 0rem 0rem;
+    }
+    
+    .container {
+        height: 100vh;
+        position: absolute;
+        right: 6.4rem;
+        top: -1.4rem;
+        width: min-content;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+    }
+    
+    .details_title {
+        font-size: 3.2rem;
+        line-height: 1.2;
+    }
+    
+    .details_sketch_no {
+        margin: 1.4rem 0rem -1rem 0rem;
+        font-weight: 400;
+    }
+    
+    .date {
+        font-weight: 400;
+        margin: 1.3rem 0rem 4rem 0rem;
+    }
+    
+    .github_link {
+        transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+    
+    .github_link:hover {
+        font-weight: 700;
+    }
+</style>
+
+<body>
+    <div class="container">
+        <div class="details">
+            <h3 class="details_sketch_no">Nature of Code | <span style="font-weight: 700;">No 14</span></h3>
+            <h4 class="date">Apr 21 2022</h4>
+            <h1 class="details_title">Cellular Automata</h1>
+            <p><b>Game of Life</b></p>
+            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rerum accusamus fuga perferendis omnis corporis exercitationem eos vitae, voluptatibus temporibus amet delectus quaerat? Ipsum iusto cupiditate vel temporibus esse incidunt ducimus!</p>
+        </div>
+        <div id="controls">
+            <h3>Controls</h3>
+        </div>
+        <footer>
+            <h3 style="font-weight: 400; margin : 0rem 0rem -0.7rem -9rem">
+                Made with ❤ by
+                <a href="https://github.com/Vishvam10" class="github_link">Vishvam</a>
+            </h3>
+        </footer>
+    </div>
+
+</body>
+<script src="./../../tweakpane/tweakpane-3.0.8.min.js"></script>
+<script src="./../../p5/p5.min.js"></script>
+<script src="./CA.js"></script>
+<script src="./sketch-14.js"></script>
+
+</html>
