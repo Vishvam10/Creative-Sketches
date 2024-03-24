@@ -1,0 +1,39 @@
+#controls {
+    width: max-content;
+    margin: -2rem 0rem 0rem 0rem;
+}
+
+.container {
+    height: 100vh;
+    position: absolute;
+    right: 8rem;
+    top: 0rem;
+    width: min-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.details_title {
+    font-size: 3.2rem;
+    line-height: 1.2;
+}
+
+.details_sketch_no {
+    margin: 1rem 0rem -1rem 0rem;
+    font-weight: 400;
+}
+
+.date {
+    font-weight: 400;
+    margin: 1.3rem 0rem 4rem 0rem;
+}
+
+.github_link {
+    transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.github_link:hover {
+    font-weight: 700;
+}
